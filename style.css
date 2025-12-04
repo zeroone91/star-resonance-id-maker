@@ -67,6 +67,11 @@ h1{margin:0;font-size:20px;letter-spacing:1px}
   font-size:13px;
 }
 
+/* 「ブラック」だけ白文字で見えるように */
+.white-text{
+  color:#ffffff !important;
+}
+
 /* ボタン */
 .action-row{margin-top:10px}
 button{
