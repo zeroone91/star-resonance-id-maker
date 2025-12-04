@@ -1,14 +1,13 @@
-/* style.css - シンプルなレスポンシブレイアウト */
+/* style.css */
 :root{
   --bg:#0b0b0b;
-  --card-bg:#fff;
   --accent:#ff8c00;
 }
 
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family: "Noto Sans JP", Arial, sans-serif;
+  font-family:"Noto Sans JP",Arial,sans-serif;
   background:var(--bg);
   color:#fff;
 }
@@ -24,14 +23,13 @@ h1{margin:0;font-size:20px;letter-spacing:1px}
   flex-wrap:wrap;
 }
 
-/* 左の操作パネル */
+/* 左パネル */
 .form-column{
   width:320px;
   max-width:100%;
   background:rgba(255,255,255,0.03);
   padding:12px;
   border-radius:8px;
-  color:#fff;
 }
 .form-column label{display:block;margin:8px 0;font-size:13px}
 .form-column input[type="text"],
@@ -54,27 +52,22 @@ h1{margin:0;font-size:20px;letter-spacing:1px}
 }
 .label-inline{font-weight:600;margin-top:8px}
 
-/* フォント選択＋文字色を2カラムで並べる */
-.controls-row{
-  display:flex;
-  gap:12px;
-  justify-content:space-between;
-  margin-top:8px;
-  flex-wrap:wrap;
+.block-group{margin-top:10px}
+
+/* フォント選択＆文字色：2つずつ改行 */
+.font-grid,
+.color-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:4px 10px;
+  margin-top:4px;
 }
-.controls-row > div{
-  flex:1 1 140px;
-  min-width:140px;
-}
-.radio-list label{display:block;margin-bottom:2px}
-.color-list label{
-  display:inline-block;
-  margin:2px 4px 2px 0;
-  padding:2px 6px;
-  border-radius:4px;
-  background:rgba(255,255,255,0.06);
+.font-grid label,
+.color-grid label{
+  font-size:13px;
 }
 
+/* ボタン */
 .action-row{margin-top:10px}
 button{
   background:var(--accent);
@@ -87,10 +80,10 @@ button{
 }
 
 /* プレビュー側 */
-.preview-column{min-width:300px}
+.preview-column{min-width:260px}
 .canvas-wrap{
   width:100%;
-  max-width:420px;   /* PC ではここまで広がる */
+  max-width:420px;          /* PC時のプレビュー幅 */
   border:1px solid rgba(255,255,255,0.06);
   padding:6px;
   border-radius:6px;
@@ -98,7 +91,7 @@ button{
 }
 canvas{
   display:block;
-  width:100%;        /* 表示は縮小するけど内部は1244×1904のまま */
+  width:100%;               /* 表示は縮小、内部は1244x1904のまま */
   height:auto;
   border-radius:4px;
   background:#000;
@@ -109,7 +102,7 @@ canvas{
   margin-top:8px;
 }
 
-/* 画面広いときだけ少し大きめに */
+/* 画面広いとき */
 @media(min-width:1100px){
   .form-column{width:360px}
   .canvas-wrap{max-width:520px}
