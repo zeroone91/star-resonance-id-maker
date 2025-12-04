@@ -1,11 +1,11 @@
 // script.js
-// card_base.png(1244x1904) を背景にして指定座標へ描画
+// card_base1.png(1244x1904) を背景にして指定座標へ描画
 
 const CONFIG = {
   canvasW: 1244,
   canvasH: 1904,
 
-  // テキスト枠（card_sumple3 の赤枠から取得）
+  // テキスト枠（card_sumple2 の赤枠から取得）
   // ※わずかに余白を持たせるため、パディングは関数側で調整
   name:       { x:417, y:280,  w:732, h:94  },   // NAME
   playerId:   { x:420, y:460,  w:729, h:87  },   // ID
