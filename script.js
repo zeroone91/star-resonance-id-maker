@@ -1,23 +1,23 @@
 // script.js
-// canvas 1244×1904px に card_base1.png を描画し、指定座標にテキスト・アイコン・チェックを載せる
+// canvas 1244×1904px に card_base1.png を描画し、指定座標にテキスト・画像・チェックを載せる
 
 // --- config: 座標（px） ---
 const CONFIG = {
   canvasW: 1244, canvasH: 1904,
 
   // テキストボックス
-  name:       { x:416.125, y:1588.29, w:723.072, h:85.144 }, // プレイヤー名
-  playStyle:  { x:66,      y:792,     w:613,     h:43     }, // プレイスタイル
-  guild:      { x:62,      y:958,     w:615,     h:71     }, // 所属ギルド
-  playTime:   { x:720,     y:792,     w:453,     h:43     }, // 主な活動時間
-  playerId:   { x:509.135, y:1433.967,w:630.063, h:78.007 }, // プレイヤーID
-  freeComment:{ x:66,      y:668,     w:1103,    h:117    }, // フリーコメント
+  name:       { x:416.125, y:1588.29,  w:723.072,  h:85.144  }, // プレイヤー名
+  playStyle:  { x:66,      y:792,      w:613,      h:43      }, // プレイスタイル
+  guild:      { x:62,      y:958,      w:615,      h:71      }, // 所属ギルド
+  playTime:   { x:720,     y:792,      w:453,      h:43      }, // 主な活動時間
+  playerId:   { x:509.135, y:1433.967, w:630.063,  h:78.007  }, // プレイヤーID
+  freeComment:{ x:66,      y:668,      w:1103,     h:117     }, // フリーコメント
 
   // 画像枠
-  userIcon:   { x:59.09,   y:1673.992,w:315.031, h:315.031 }, // キャラクターアイコン
-  freePhoto:  { x:480,     y:516,     w:655,     h:365     }, // フリーフォト
+  userIcon:   { x:59.09,   y:1673.992, w:315.031,  h:315.031 }, // キャラクターアイコン
+  freePhoto:  { x:480,     y:516,      w:655,      h:365     }, // フリーフォト
 
-  // チェック枠（Class）
+  // チェック枠（Class 8つ）
   classChecks: [
     { x:99,   y:1105, w:38, h:38 },
     { x:240,  y:1105, w:38, h:38 },
@@ -29,21 +29,21 @@ const CONFIG = {
     { x:1082, y:1105, w:38, h:38 }
   ],
 
-  // チェック枠（VC）
+  // チェック枠（VC 3つ）
   vcChecks: [
-    { x:856, y:920, w:38, h:38 },
-    { x:979, y:920, w:38, h:38 },
-    { x:1095,y:920, w:38, h:38 }
+    { x:856,  y:920, w:38, h:38 },
+    { x:979,  y:920, w:38, h:38 },
+    { x:1095, y:920, w:38, h:38 }
   ],
 
   // 画像パス
-  checkPath: 'images/check.png',   // あれば優先的に使う。無ければ赤丸＋✔を描画
-  basePath:  'card_base1.png'      // ベースカード
+  checkPath: 'images/check.png',  // あれば使う。なければ赤丸＋チェックで代用
+  basePath:  'card_base1.png'
 };
 
 // --- DOM取得 ---
 const canvas = document.getElementById('cardCanvas');
-const ctx = canvas.getContext('2d');
+const ctx     = canvas.getContext('2d');
 
 const inpName      = document.getElementById('inpName');
 const inpPlayerId  = document.getElementById('inpPlayerId');
@@ -58,12 +58,12 @@ const fileFree = document.getElementById('fileFree');
 const btnRender   = document.getElementById('btnRender');
 const btnDownload = document.getElementById('btnDownload');
 
-// ベース画像読込
+// ベースカード画像
 let baseImg = new Image();
 baseImg.src = CONFIG.basePath;
 baseImg.onload = () => drawPreview();
 
-// チェック画像（無くてもOK）
+// チェック画像（なくてもOK）
 let checkImg = new Image();
 checkImg.src = CONFIG.checkPath;
 checkImg.onerror = () => { checkImg = null; };
@@ -92,7 +92,7 @@ function drawPreview() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // ベースカード
+  // ベース
   if (baseImg && baseImg.complete) {
     ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
   } else {
@@ -102,16 +102,24 @@ function drawPreview() {
 
   // フリーフォト
   if (freePhotoImg) {
-    drawImageCover(ctx, freePhotoImg, CONFIG.freePhoto.x, CONFIG.freePhoto.y, CONFIG.freePhoto.w, CONFIG.freePhoto.h);
+    drawImageCover(ctx, freePhotoImg,
+      CONFIG.freePhoto.x, CONFIG.freePhoto.y,
+      CONFIG.freePhoto.w, CONFIG.freePhoto.h
+    );
   }
 
-  // アイコン
+  // キャラクターアイコン
   if (userIconImg) {
-    drawImageCover(ctx, userIconImg, CONFIG.userIcon.x, CONFIG.userIcon.y, CONFIG.userIcon.w, CONFIG.userIcon.h);
+    drawImageCover(ctx, userIconImg,
+      CONFIG.userIcon.x, CONFIG.userIcon.y,
+      CONFIG.userIcon.w, CONFIG.userIcon.h
+    );
   }
 
   // クラスチェック
-  const classCheckboxes = Array.from(document.querySelectorAll('#classList input[type=checkbox]'));
+  const classCheckboxes = Array.from(
+    document.querySelectorAll('#classList input[type=checkbox]')
+  );
   classCheckboxes.forEach((cb, idx) => {
     if (cb.checked && CONFIG.classChecks[idx]) {
       drawCheckAt(ctx, CONFIG.classChecks[idx]);
@@ -119,7 +127,9 @@ function drawPreview() {
   });
 
   // VCチェック
-  const vcCheckboxes = Array.from(document.querySelectorAll('#vcList input[type=checkbox]'));
+  const vcCheckboxes = Array.from(
+    document.querySelectorAll('#vcList input[type=checkbox]')
+  );
   vcCheckboxes.forEach((cb, idx) => {
     if (cb.checked && CONFIG.vcChecks[idx]) {
       drawCheckAt(ctx, CONFIG.vcChecks[idx]);
@@ -134,28 +144,15 @@ function drawPreview() {
     fontChoice === 'C' ? '"DotGothic16", sans-serif' :
                          '"M PLUS Rounded 1c", sans-serif';
 
-  const colorHex = document.querySelector('input[name="color"]:checked').value || '#000000';
+  const colorHex =
+    (document.querySelector('input[name="color"]:checked')?.value) || '#000000';
 
-  // テキスト描画（センタリング）
+  // テキスト（中央寄せ）
   drawAutoCenteredText(ctx, inpName.value.trim(),      CONFIG.name,      fontFamily, colorHex);
   drawAutoCenteredText(ctx, inpPlayerId.value.trim(),  CONFIG.playerId,  fontFamily, colorHex);
   drawAutoCenteredText(ctx, inpGuild.value.trim(),     CONFIG.guild,     fontFamily, colorHex);
   drawAutoCenteredText(ctx, inpPlayStyle.value.trim(), CONFIG.playStyle, fontFamily, colorHex);
   drawAutoCenteredText(ctx, inpPlayTime.value.trim(),  CONFIG.playTime,  fontFamily, colorHex);
-
-  // クラス・VC のテキスト表示（チェックの上に小さく書きたい時用）
-  const selectedClasses = classCheckboxes.filter(c => c.checked).map(c => c.value).join(' / ');
-  const selectedVC      = vcCheckboxes.filter(c => c.checked).map(c => c.value).join(' / ');
-
-  const classTextBox = { x:66,  y:CONFIG.classChecks[0].y - 40, w:1103, h:40 };
-  const vcTextBox    = { x:660, y:CONFIG.vcChecks[0].y   - 40, w:520,  h:40  };
-
-  if (selectedClasses) {
-    drawAutoCenteredText(ctx, selectedClasses, classTextBox, fontFamily, colorHex);
-  }
-  if (selectedVC) {
-    drawAutoCenteredText(ctx, selectedVC, vcTextBox, fontFamily, colorHex);
-  }
 
   // フリーコメント（左寄せ・自動改行）
   drawAutoWrappedLeftText(ctx, inpComment.value.trim(), CONFIG.freeComment, fontFamily, colorHex);
@@ -175,21 +172,22 @@ function readImageFile(file, cb) {
   reader.readAsDataURL(file);
 }
 
-// ボックス内に収まるように画像をトリミングして描画（cover）
+// box の中を「cover」っぽく埋める
 function drawImageCover(ctx, img, x, y, w, h) {
-  const iw = img.width, ih = img.height;
+  const iw = img.width;
+  const ih = img.height;
   const boxRatio = w / h;
   const imgRatio = iw / ih;
   let sx, sy, sw, sh;
 
   if (imgRatio > boxRatio) {
-    // 横長 → 左右をカット
+    // 横長 → 左右カット
     sh = ih;
     sw = sh * boxRatio;
     sx = (iw - sw) / 2;
     sy = 0;
   } else {
-    // 縦長 → 上下をカット
+    // 縦長 → 上下カット
     sw = iw;
     sh = sw / boxRatio;
     sx = 0;
@@ -235,6 +233,7 @@ function drawCheckAt(ctx, rect) {
 // ボックス内に収まる最大サイズで中央配置
 function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex) {
   if (!text) return;
+
   const padding = 6;
   const maxW = box.w - padding * 2;
   const maxH = box.h - padding * 2;
@@ -262,6 +261,7 @@ function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex) {
 // 左寄せ・自動改行・ボックス高さに収まるようフォント調整
 function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex) {
   if (!text) return;
+
   const padding = 6;
   const maxW = box.w - padding * 2;
   const maxH = box.h - padding * 2;
@@ -295,7 +295,7 @@ function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex) {
   }
 }
 
-// 幅maxWidthを超えないように行分割
+// 最大幅maxWidthで行を折る
 function wrapTextLines(ctx, text, maxWidth) {
   const words = text.split(/\s+/);
   const lines = [];
@@ -316,11 +316,10 @@ function wrapTextLines(ctx, text, maxWidth) {
 }
 
 // ---------------------------------------------------------
-// ダウンロード
+// PNGダウンロード
 // ---------------------------------------------------------
 function downloadPNG() {
-  // 最新状態にしてから保存
-  drawPreview();
+  drawPreview(); // 最新状態
   const link = document.createElement('a');
   link.download = 'STAR_RESONANCE_ID.png';
   link.href = canvas.toDataURL('image/png');
