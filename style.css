@@ -1,114 +1,181 @@
 /* style.css */
-:root{
-  --bg:#0b0b0b;
-  --accent:#ff8c00;
+
+:root {
+  --bg: #0b0b0b;
+  --accent: #ff8c00;
 }
 
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:"Noto Sans JP",Arial,sans-serif;
-  background:var(--bg);
-  color:#fff;
-}
-header{padding:16px;text-align:center}
-h1{margin:0;font-size:20px;letter-spacing:1px}
+* { box-sizing: border-box; }
 
-.container{
-  display:flex;
-  gap:18px;
-  padding:12px;
-  align-items:flex-start;
-  justify-content:center;
-  flex-wrap:wrap;
+body {
+  margin: 0;
+  font-family: "Noto Sans JP", Arial, sans-serif;
+  background: var(--bg);
+  color: #fff;
 }
 
-/* 左パネル */
-.form-column{
-  width:320px;
-  max-width:100%;
-  background:rgba(255,255,255,0.03);
-  padding:12px;
-  border-radius:8px;
+header {
+  padding: 16px;
+  text-align: center;
 }
-.form-column label{display:block;margin:8px 0;font-size:13px}
+
+h1 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+
+.container {
+  display: flex;
+  gap: 18px;
+  padding: 12px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ▼ 左側フォーム ▼ */
+.form-column {
+  width: 320px;
+  max-width: 100%;
+  background: rgba(255,255,255,0.03);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.form-column label {
+  display: block;
+  margin: 8px 0;
+  font-size: 13px;
+}
+
 .form-column input[type="text"],
-.form-column textarea{
-  width:100%;
-  padding:8px;
-  border-radius:6px;
-  border:1px solid rgba(255,255,255,0.12);
-  background:rgba(0,0,0,0.45);
-  color:#fff;
-}
-.form-column input[type="file"]{width:100%}
-
-.check-vertical label{display:block;padding:3px 0}
-.check-inline{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin:6px 0;
-}
-.label-inline{font-weight:600;margin-top:8px}
-
-.block-group{margin-top:10px}
-
-/* フォント選択＆文字色：2つずつ改行 */
-.font-grid,
-.color-grid{
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0,1fr));
-  gap:4px 10px;
-  margin-top:4px;
-}
-.font-grid label,
-.color-grid label{
-  font-size:13px;
+.form-column textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.45);
+  color: #fff;
 }
 
-/* 「ブラック」だけ白文字で見えるように */
-.white-text{
-  color:#ffffff !important;
+.form-column input[type="file"] {
+  width: 100%;
 }
 
-/* ボタン */
-.action-row{margin-top:10px}
-button{
-  background:var(--accent);
-  color:#111;
-  border:none;
-  padding:8px 12px;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:700;
+/* タイトル（フォント選択/文字色/クラス） */
+.section-title {
+  font-size: 13px;
+  font-weight: normal;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  display: block;
 }
 
-/* プレビュー側 */
-.preview-column{min-width:260px}
-.canvas-wrap{
-  width:100%;
-  max-width:420px;          /* PC時のプレビュー幅 */
-  border:1px solid rgba(255,255,255,0.06);
-  padding:6px;
-  border-radius:6px;
-  background:#222;
-}
-canvas{
-  display:block;
-  width:100%;               /* 表示は縮小、内部は1244x1904のまま */
-  height:auto;
-  border-radius:4px;
-  background:#000;
-}
-.note{
-  font-size:12px;
-  color:#ddd;
-  margin-top:8px;
+/* ▼ クラス：2列で□位置を完全に揃える */
+.class-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px 12px;
 }
 
-/* 画面広いとき */
-@media(min-width:1100px){
-  .form-column{width:360px}
-  .canvas-wrap{max-width:520px}
+.class-grid label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.class-grid input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ▼ VC（横並び） */
+.check-inline {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 6px 0;
+}
+
+/* ▼ フォント選択（2列） */
+.font-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 10px;
+}
+
+/* ▼ 文字色（2列） */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 10px;
+}
+
+/* ブラックだけ白字に */
+.white-text {
+  color: #ffffff !important;
+}
+
+/* ▼ ボタン類 ▼ */
+.action-row {
+  margin-top: 10px;
+}
+
+button {
+  background: var(--accent);
+  color: #111;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+  width: 100%;
+}
+
+/* ▼ X投稿ボタン（青背景） ▼ */
+.btn-x {
+  background: #1d9bf0;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.btn-x:hover {
+  background: #1a8cd8;
+}
+
+/* ▼ プレビュー ▼ */
+.preview-column {
+  min-width: 260px;
+}
+
+.canvas-wrap {
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 6px;
+  border-radius: 6px;
+  background: #222;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  background: #000;
+}
+
+.note {
+  font-size: 12px;
+  color: #ddd;
+  margin-top: 8px;
+}
+
+/* PC向け */
+@media(min-width:1100px) {
+  .form-column { width: 360px; }
+  .canvas-wrap { max-width: 520px; }
 }
