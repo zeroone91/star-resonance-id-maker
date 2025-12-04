@@ -36,7 +36,7 @@ const CONFIG = {
     { x:1096,y:968, w:47, h:47 }
   ],
 
-  basePath:  'card_base.png',
+  basePath:  'card_base1.png',
   checkPath: 'check.png'
 };
 
