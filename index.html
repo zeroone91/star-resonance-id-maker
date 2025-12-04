@@ -1,245 +1,67 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <title>STAR RESONANCE ID MAKER</title>
-  <style>
-    body {
-      background: #000;
-      color: #fff;
-      font-family: "Arial", sans-serif;
-      text-align: center;
-    }
+/* style.css - シンプルなレスポンシブレイアウト */
+:root{
+  --bg:#0b0b0b;
+  --card-bg:#fff;
+  --accent:#ff8c00;
+}
 
-    h1 {
-      margin-top: 15px;
-    }
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: "Noto Sans JP", Arial, sans-serif;
+  background:var(--bg);
+  color:#fff;
+}
+header{padding:16px;text-align:center}
+h1{margin:0;font-size:20px;letter-spacing:1px}
 
-    .wrap {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      padding: 20px;
-    }
+.container{
+  display:flex;
+  gap:18px;
+  padding:12px;
+  align-items:flex-start;
+  justify-content:center;
+  flex-wrap:wrap;
+}
 
-    .form-area {
-      width: 320px;
-      text-align: left;
-      font-size: 14px;
-    }
+/* 左の操作パネル */
+.form-column{
+  width:320px;
+  background:rgba(255,255,255,0.03);
+  padding:12px;
+  border-radius:8px;
+  color:#fff;
+}
+.form-column label{display:block;margin:8px 0;font-size:13px}
+.form-column input[type="text"],
+.form-column textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.45);color:#fff}
+.form-column input[type="file"]{width:100%}
 
-    label {
-      display: block;
-      margin-top: 10px;
-    }
+.check-vertical label{display:block;padding:3px 0}
+.check-inline{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0}
+.label-inline{font-weight:600;margin-top:8px}
 
-    input, textarea, select {
-      width: 100%;
-      margin-top: 5px;
-      padding: 4px;
-    }
+.controls-row{display:flex;gap:12px;justify-content:space-between;margin-top:8px}
+.radio-list label{display:block}
+.color-list label{display:inline-block;margin-right:6px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.03)}
 
-    .check-area {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-    }
+.action-row{margin-top:10px}
+button{
+  background:var(--accent);
+  color:#111;
+  border:none;
+  padding:8px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:700;
+}
 
-    .check-area label {
-      display: inline-block;
-      margin-top: 0;
-      width: 48%;
-    }
-
-    canvas {
-      background: #000;
-      border: 2px solid #555;
-    }
-
-    button {
-      margin-top: 10px;
-      padding: 8px 15px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-
-<h1>STAR RESONANCE ID MAKER</h1>
-
-<div class="wrap">
-
-  <!-- 入力欄 -->
-  <div class="form-area">
-
-    <label>背景画像</label>
-    <input type="file" id="bgInput">
-
-    <label>立ち絵</label>
-    <input type="file" id="charInput">
-
-    <label>Name</label>
-    <input type="text" id="nameInput">
-
-    <label>Code Name</label>
-    <input type="text" id="codeInput">
-
-    <label>Comment</label>
-    <textarea id="commentInput"></textarea>
-
-    <label>Text Color</label>
-    <select id="colorSelect">
-      <option value="white">White</option>
-      <option value="red">Red</option>
-      <option value="cyan">Cyan</option>
-      <option value="yellow">Yellow</option>
-      <option value="lime">Lime</option>
-      <option value="violet">Violet</option>
-    </select>
-
-    <label>Class（複数選択OK）</label>
-    <div class="check-area" id="classArea">
-      <label><input type="checkbox" value="Striker"> Striker</label>
-      <label><input type="checkbox" value="Defender"> Defender</label>
-      <label><input type="checkbox" value="Shooter"> Shooter</label>
-      <label><input type="checkbox" value="Caster"> Caster</label>
-      <label><input type="checkbox" value="Supporter"> Supporter</label>
-    </div>
-
-    <label>VC（複数選択OK）</label>
-    <div class="check-area" id="vcArea">
-      <label><input type="checkbox" value="Fire"> Fire</label>
-      <label><input type="checkbox" value="Water"> Water</label>
-      <label><input type="checkbox" value="Wind"> Wind</label>
-      <label><input type="checkbox" value="Earth"> Earth</label>
-      <label><input type="checkbox" value="Light"> Light</label>
-      <label><input type="checkbox" value="Dark"> Dark</label>
-    </div>
-
-    <button onclick="download()">Download</button>
-
-  </div>
-
-  <!-- プレビュー -->
-  <canvas id="canvas" width="600" height="900"></canvas>
-
-</div>
-
-<script>
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-
-  let bgImg = null;
-  let charImg = null;
-
-  document.getElementById("bgInput").addEventListener("change", e => {
-    loadImage(e.target.files[0], img => {
-      bgImg = img;
-      draw();
-    });
-  });
-
-  document.getElementById("charInput").addEventListener("change", e => {
-    loadImage(e.target.files[0], img => {
-      charImg = img;
-      draw();
-    });
-  });
-
-  document.querySelectorAll("input, textarea, select").forEach(el => {
-    el.addEventListener("input", draw);
-    el.addEventListener("change", draw);
-  });
-
-  function loadImage(file, callback){
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = new Image();
-      img.onload = () => callback(img);
-      img.src = e.target.result;
-    }
-    reader.readAsDataURL(file);
-  }
-
-  function getCheckedValues(id) {
-    return Array.from(document.querySelectorAll(`#${id} input:checked`))
-      .map(el => el.value)
-      .join(" / ");
-  }
-
-  function autoFont(text, maxWidth, baseSize){
-    let size = baseSize;
-    ctx.font = size + "px Arial";
-    while(ctx.measureText(text).width > maxWidth && size > 8){
-      size -= 1;
-      ctx.font = size + "px Arial";
-    }
-    return size;
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    if(bgImg){
-      ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-    }
-
-    if(charImg){
-      ctx.drawImage(charImg, 150, 200, 300, 450);
-    }
-
-    const color = document.getElementById("colorSelect").value;
-    ctx.fillStyle = color;
-
-    const name = document.getElementById("nameInput").value;
-    const code = document.getElementById("codeInput").value;
-    const comment = document.getElementById("commentInput").value;
-    const classText = getCheckedValues("classArea");
-    const vcText = getCheckedValues("vcArea");
-
-    drawText(name, 80, 80, 30, 440);
-    drawText(code, 80, 120, 20, 440);
-    drawText(classText, 80, 680, 18, 440);
-    drawText(vcText, 80, 720, 18, 440);
-
-    wrapText(comment, 80, 760, 440, 20);
-  }
-
-  function drawText(text, x, y, baseSize, maxWidth){
-    if(!text) return;
-    let size = autoFont(text, maxWidth, baseSize);
-    ctx.font = size + "px Arial";
-    ctx.fillText(text, x, y);
-  }
-
-  function wrapText(text, x, y, maxWidth, lineHeight) {
-    if(!text) return;
-    ctx.font = "16px Arial";
-    const words = text.split(" ");
-    let line = "";
-
-    for(let i = 0; i < words.length; i++){
-      const testLine = line + words[i] + " ";
-      const testWidth = ctx.measureText(testLine).width;
-
-      if(testWidth > maxWidth && i > 0){
-        ctx.fillText(line, x, y);
-        line = words[i] + " ";
-        y += lineHeight;
-      } else {
-        line = testLine;
-      }
-    }
-    ctx.fillText(line, x, y);
-  }
-
-  function download(){
-    const link = document.createElement("a");
-    link.download = "STAR_RESONANCE_ID.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  }
-</script>
-
-</body>
-</html>
+/* プレビュー側 */
+.preview-column{min-width:300px}
+.canvas-wrap{width:312px;border:1px solid rgba(255,255,255,0.06);padding:6px;border-radius:6px;background:#222}
+canvas{display:block;width:100%;height:auto;border-radius:4px;background:#000}
+.note{font-size:12px;color:#ddd;margin-top:8px}
+@media(min-width:1100px){
+  .form-column{width:360px}
+  .canvas-wrap{width:510px}
+}
