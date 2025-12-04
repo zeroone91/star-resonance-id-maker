@@ -38,4 +38,99 @@
         <label><input type="checkbox" value="ゲイルランサー" /> ゲイルランサー</label>
         <label><input type="checkbox" value="シールドファイター" /> シールドファイター</label>
         <label><input type="checkbox" value="ヴァーダントオラクル" /> ヴァーダントオラクル</label>
-        <label><input type="checkb
+        <label><input type="checkbox" value="フロストメイジ" /> フロストメイジ</label>
+        <label><input type="checkbox" value="ビートパフォーマー" /> ビートパフォーマー</label>
+      </div>
+
+      <label>プレイスタイル
+        <input id="inpPlayStyle" type="text" placeholder="例：エンジョイ / ガチ勢 / SS活動" />
+      </label>
+
+      <label>主な活動時間
+        <input id="inpPlayTime" type="text" placeholder="例：日中メイン / 夜間メイン / 深夜メイン" />
+      </label>
+
+      <label>ボイスチャット（複数可）</label>
+      <div id="vcList" class="check-inline">
+        <label><input type="checkbox" value="Discord" /> Discord</label>
+        <label><input type="checkbox" value="LINE" /> LINE</label>
+        <label><input type="checkbox" value="NG" /> NG</label>
+      </div>
+
+      <label>フリーコメント
+        <textarea id="inpComment" rows="4" placeholder="例：よろしくお願いします！"></textarea>
+      </label>
+
+      <label>キャラクターアイコン（USER ICON）
+        <input id="fileIcon" type="file" accept="image/*" />
+      </label>
+
+      <label>フリーフォト（FREE PHOTO）
+        <input id="fileFree" type="file" accept="image/*" />
+      </label>
+
+      <div class="controls-row">
+        <div>
+          <div class="label-inline">フォント選択</div>
+          <div id="fontSel" class="radio-list">
+            <label style="font-family:'Noto Sans JP',sans-serif">
+              <input type="radio" name="font" value="A" checked /> かっこいい系
+            </label>
+            <label style="font-family:'Yusei Magic',sans-serif">
+              <input type="radio" name="font" value="B" /> かわいい系
+            </label>
+            <label style="font-family:'DotGothic16',sans-serif">
+              <input type="radio" name="font" value="C" /> ゲーム系
+            </label>
+            <label style="font-family:'M PLUS Rounded 1c',sans-serif">
+              <input type="radio" name="font" value="D" /> おしゃれ系
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <div class="label-inline">文字色</div>
+          <div id="colorSel" class="radio-list color-list">
+            <label style="color:#000000">
+              <input type="radio" name="color" value="#000000" checked /> ブラック
+            </label>
+            <label style="color:#007bff">
+              <input type="radio" name="color" value="#007bff" /> ブルー
+            </label>
+            <label style="color:#ff0000">
+              <input type="radio" name="color" value="#ff0000" /> レッド
+            </label>
+            <label style="color:#ff4da6">
+              <input type="radio" name="color" value="#ff4da6" /> ピンク
+            </label>
+            <label style="color:#ff8c00">
+              <input type="radio" name="color" value="#ff8c00" /> オレンジ
+            </label>
+            <label style="color:#0b6623">
+              <input type="radio" name="color" value="#0b6623" /> グリーン
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button id="btnRender" type="button">画像を作成</button>
+      </div>
+
+      <div style="margin-top:10px;">
+        <button id="btnDownload" type="button">自己紹介カードを保存</button>
+      </div>
+    </section>
+
+    <section class="preview-column">
+      <div class="canvas-wrap">
+        <!-- 内部解像度は 1244x1904 固定。CSSで縮小表示する -->
+        <canvas id="cardCanvas" width="1244" height="1904"></canvas>
+      </div>
+      <p class="note">※ 画像を作成 → 自己紹介カードを保存で PNG をダウンロードできます。</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
