@@ -34,16 +34,39 @@ h1{margin:0;font-size:20px;letter-spacing:1px}
 }
 .form-column label{display:block;margin:8px 0;font-size:13px}
 .form-column input[type="text"],
-.form-column textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.45);color:#fff}
+.form-column textarea{
+  width:100%;
+  padding:8px;
+  border-radius:6px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:rgba(0,0,0,0.45);
+  color:#fff;
+}
 .form-column input[type="file"]{width:100%}
 
 .check-vertical label{display:block;padding:3px 0}
-.check-inline{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0}
+.check-inline{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:6px 0;
+}
 .label-inline{font-weight:600;margin-top:8px}
 
-.controls-row{display:flex;gap:12px;justify-content:space-between;margin-top:8px}
+.controls-row{
+  display:flex;
+  gap:12px;
+  justify-content:space-between;
+  margin-top:8px;
+}
 .radio-list label{display:block}
-.color-list label{display:inline-block;margin-right:6px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.03)}
+.color-list label{
+  display:inline-block;
+  margin-right:6px;
+  padding:2px 6px;
+  border-radius:4px;
+  background:rgba(255,255,255,0.03);
+}
 
 .action-row{margin-top:10px}
 button{
@@ -58,10 +81,27 @@ button{
 
 /* プレビュー側 */
 .preview-column{min-width:300px}
-.canvas-wrap{width:312px;border:1px solid rgba(255,255,255,0.06);padding:6px;border-radius:6px;background:#222}
-canvas{display:block;width:100%;height:auto;border-radius:4px;background:#000}
-.note{font-size:12px;color:#ddd;margin-top:8px}
+.canvas-wrap{
+  width:100%;
+  max-width:420px;  /* ここで表示サイズを決める（中身は1244x1904のまま） */
+  border:1px solid rgba(255,255,255,0.06);
+  padding:6px;
+  border-radius:6px;
+  background:#222;
+}
+canvas{
+  display:block;
+  width:100%;       /* 内部 1244x1904 を等倍縮小 */
+  height:auto;
+  border-radius:4px;
+  background:#000;
+}
+.note{
+  font-size:12px;
+  color:#ddd;
+  margin-top:8px;
+}
 @media(min-width:1100px){
   .form-column{width:360px}
-  .canvas-wrap{width:510px}
+  .canvas-wrap{max-width:520px}
 }
