@@ -86,7 +86,7 @@ btnDownload.addEventListener('click', downloadPNG);
 btnShareX.onclick = () => {
   const tweet =
     "(下記ハッシュタグは消さずに保存した画像を添付して使用してね)\n" +
-    
+    "　\n" +
     "#スタレゾ #スタレゾ自己紹介カード\n" +
     "作成はコチラから👇\n" +
     "https://zeroone91.github.io/star-resonance-id-maker/";
