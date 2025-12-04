@@ -7,7 +7,6 @@
 
   <!-- フォント（A〜D用） -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=M+PLUS+Rounded+1c:wght@400;700&family=Yusei+Magic&family=DotGothic16&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -16,8 +15,10 @@
   </header>
 
   <main class="container">
+    <!-- 入力フォーム -->
     <section class="form-column">
-      <!-- テキスト入力（順番指定どおり） -->
+
+      <!-- テキスト入力 -->
       <label>プレイヤー名
         <input id="inpName" type="text" placeholder="例：ユウキ" />
       </label>
@@ -27,7 +28,7 @@
       </label>
 
       <label>所属ギルド
-        <input id="inpGuild" type="text" placeholder="例：夜行隊" />
+        <input id="inpGuild" type="text" placeholder="例：ぶらっくカンパニー" />
       </label>
 
       <div class="label-inline">クラス（複数可）</div>
@@ -69,65 +70,64 @@
         <input id="fileFree" type="file" accept="image/*" />
       </label>
 
-      <div class="controls-row">
-        <div>
-          <div class="label-inline">フォント選択</div>
-          <div id="fontSel" class="radio-list">
-            <label style="font-family:'Noto Sans JP',sans-serif">
-              <input type="radio" name="font" value="A" checked /> かっこいい系
-            </label>
-            <label style="font-family:'Yusei Magic',sans-serif">
-              <input type="radio" name="font" value="B" /> かわいい系
-            </label>
-            <label style="font-family:'DotGothic16',sans-serif">
-              <input type="radio" name="font" value="C" /> ゲーム系
-            </label>
-            <label style="font-family:'M PLUS Rounded 1c',sans-serif">
-              <input type="radio" name="font" value="D" /> おしゃれ系
-            </label>
-          </div>
+      <!-- フォント選択 -->
+      <div class="block-group">
+        <div class="label-inline">フォント選択</div>
+        <div class="font-grid">
+          <label style="font-family:'Noto Sans JP',sans-serif">
+            <input type="radio" name="font" value="A" checked /> かっこいい系
+          </label>
+          <label style="font-family:'Yusei Magic',sans-serif">
+            <input type="radio" name="font" value="B" /> かわいい系
+          </label>
+          <label style="font-family:'DotGothic16',sans-serif">
+            <input type="radio" name="font" value="C" /> ゲーム系
+          </label>
+          <label style="font-family:'M PLUS Rounded 1c',sans-serif">
+            <input type="radio" name="font" value="D" /> おしゃれ系
+          </label>
         </div>
+      </div>
 
-        <div>
-          <div class="label-inline">文字色</div>
-          <div id="colorSel" class="radio-list color-list">
-            <label style="color:#000000">
-              <input type="radio" name="color" value="#000000" checked /> ブラック
-            </label>
-            <label style="color:#007bff">
-              <input type="radio" name="color" value="#007bff" /> ブルー
-            </label>
-            <label style="color:#ff0000">
-              <input type="radio" name="color" value="#ff0000" /> レッド
-            </label>
-            <label style="color:#ff4da6">
-              <input type="radio" name="color" value="#ff4da6" /> ピンク
-            </label>
-            <label style="color:#ff8c00">
-              <input type="radio" name="color" value="#ff8c00" /> オレンジ
-            </label>
-            <label style="color:#0b6623">
-              <input type="radio" name="color" value="#0b6623" /> グリーン
-            </label>
-          </div>
+      <!-- 文字色 -->
+      <div class="block-group">
+        <div class="label-inline">文字色</div>
+        <div class="color-grid">
+          <label style="color:#000000">
+            <input type="radio" name="color" value="#000000" checked /> ブラック
+          </label>
+          <label style="color:#007bff">
+            <input type="radio" name="color" value="#007bff" /> ブルー
+          </label>
+          <label style="color:#ff0000">
+            <input type="radio" name="color" value="#ff0000" /> レッド
+          </label>
+          <label style="color:#ff4da6">
+            <input type="radio" name="color" value="#ff4da6" /> ピンク
+          </label>
+          <label style="color:#ff8c00">
+            <input type="radio" name="color" value="#ff8c00" /> オレンジ
+          </label>
+          <label style="color:#0b6623">
+            <input type="radio" name="color" value="#0b6623" /> グリーン
+          </label>
         </div>
       </div>
 
       <div class="action-row">
         <button id="btnRender" type="button">画像を作成</button>
       </div>
-
-      <div style="margin-top:10px;">
+      <div class="action-row">
         <button id="btnDownload" type="button">自己紹介カードを保存</button>
       </div>
     </section>
 
+    <!-- プレビュー -->
     <section class="preview-column">
       <div class="canvas-wrap">
-        <!-- 内部解像度は 1244x1904 固定。CSSで縮小表示する -->
         <canvas id="cardCanvas" width="1244" height="1904"></canvas>
       </div>
-      <p class="note">※ 画像を作成 → 自己紹介カードを保存で PNG をダウンロードできます。</p>
+      <p class="note">※「画像を作成」→「自己紹介カードを保存」で PNG をダウンロードできます。</p>
     </section>
   </main>
 
