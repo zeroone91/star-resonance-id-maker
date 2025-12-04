@@ -37,7 +37,7 @@ const CONFIG = {
     { x:1096,y:968, w:47, h:47 }
   ],
 
-  basePath:  'card_base.png',  // ★ GitHub にこの名前でアップロードしてね
+  basePath:  'card_base1.png',  // ★ GitHub にこの名前でアップロードしてね
   checkPath: 'check.png'       // ★ チェック画像
 };
 
