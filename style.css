@@ -179,3 +179,24 @@ canvas {
   .form-column { width: 360px; }
   .canvas-wrap { max-width: 520px; }
 }
+
+.howto {
+  background: rgba(255,255,255,0.05);
+  margin: 0 auto 15px;
+  padding: 12px;
+  border-radius: 6px;
+  width: calc(100% - 24px);
+  max-width: 800px;
+}
+
+.howto h2 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.howto p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
