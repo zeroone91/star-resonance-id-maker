@@ -1,67 +1,116 @@
-/* style.css - シンプルなレスポンシブレイアウト */
-:root{
-  --bg:#0b0b0b;
-  --card-bg:#fff;
-  --accent:#ff8c00;
-}
+/<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>STAR RESONANCE ID MAKER</title>
 
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family: "Noto Sans JP", Arial, sans-serif;
-  background:var(--bg);
-  color:#fff;
-}
-header{padding:16px;text-align:center}
-h1{margin:0;font-size:20px;letter-spacing:1px}
+  <!-- Google Fonts used (mapped to your A/B/C/D styles) -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=M+PLUS+Rounded+1c:wght@400;700&family=Yusei+Magic&family=DotGothic16&display=swap" rel="stylesheet">
 
-.container{
-  display:flex;
-  gap:18px;
-  padding:12px;
-  align-items:flex-start;
-  justify-content:center;
-  flex-wrap:wrap;
-}
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>STAR RESONANCE ID MAKER</h1>
+  </header>
 
-/* 左の操作パネル */
-.form-column{
-  width:320px;
-  background:rgba(255,255,255,0.03);
-  padding:12px;
-  border-radius:8px;
-  color:#fff;
-}
-.form-column label{display:block;margin:8px 0;font-size:13px}
-.form-column input[type="text"],
-.form-column textarea{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.45);color:#fff}
-.form-column input[type="file"]{width:100%}
+  <main class="container">
+    <section class="form-column">
+      <!-- テキスト入力（指定の順番） -->
+      <label>プレイヤー名
+        <input id="inpName" type="text" placeholder="例：ユウキ">
+      </label>
 
-.check-vertical label{display:block;padding:3px 0}
-.check-inline{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0}
-.label-inline{font-weight:600;margin-top:8px}
+      <label>プレイヤーID
+        <input id="inpPlayerId" type="text" placeholder="例：Zero#1234">
+      </label>
 
-.controls-row{display:flex;gap:12px;justify-content:space-between;margin-top:8px}
-.radio-list label{display:block}
-.color-list label{display:inline-block;margin-right:6px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.03)}
+      <label>所属ギルド
+        <input id="inpGuild" type="text" placeholder="例：夜行隊">
+      </label>
 
-.action-row{margin-top:10px}
-button{
-  background:var(--accent);
-  color:#111;
-  border:none;
-  padding:8px 12px;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:700;
-}
+      <!-- CLASS (checkboxes vertical) -->
+      <div class="label-inline">クラス（複数可）</div>
+      <div id="classList" class="check-vertical">
+        <label><input type="checkbox" value="ストームブレイド"> ストームブレイド</label>
+        <label><input type="checkbox" value="ヘヴィガーディアン"> ヘヴィガーディアン</label>
+        <label><input type="checkbox" value="ディバインアーチャー"> ディバインアーチャー</label>
+        <label><input type="checkbox" value="ゲイルランサー"> ゲイルランサー</label>
+        <label><input type="checkbox" value="シールドファイター"> シールドファイター</label>
+        <label><input type="checkbox" value="ヴァーダントオラクル"> ヴァーダントオラクル</label>
+        <label><input type="checkbox" value="フロストメイジ"> フロストメイジ</label>
+        <label><input type="checkbox" value="ビートパフォーマー"> ビートパフォーマー</label>
+      </div>
 
-/* プレビュー側 */
-.preview-column{min-width:300px}
-.canvas-wrap{width:312px;border:1px solid rgba(255,255,255,0.06);padding:6px;border-radius:6px;background:#222}
-canvas{display:block;width:100%;height:auto;border-radius:4px;background:#000}
-.note{font-size:12px;color:#ddd;margin-top:8px}
-@media(min-width:1100px){
-  .form-column{width:360px}
-  .canvas-wrap{width:510px}
-}
+      <label>プレイスタイル
+        <input id="inpPlayStyle" type="text" placeholder="例：エンジョイ／ガチ勢／SS活動">
+      </label>
+
+      <label>主な活動時間
+        <input id="inpPlayTime" type="text" placeholder="例：夜間メイン">
+      </label>
+
+      <label>ボイスチャット（複数可）</label>
+      <div id="vcList" class="check-inline">
+        <label><input type="checkbox" value="Discord"> Discord</label>
+        <label><input type="checkbox" value="LINE"> LINE</label>
+        <label><input type="checkbox" value="NG"> NG</label>
+      </div>
+
+      <label>フリーコメント
+        <textarea id="inpComment" rows="4" placeholder="例：よろしくお願いします！"></textarea>
+      </label>
+
+      <label>キャラクターアイコン（USER ICON）
+        <input id="fileIcon" type="file" accept="image/*">
+      </label>
+
+      <label>フリーフォト（FREE PHOTO）
+        <input id="fileFree" type="file" accept="image/*">
+      </label>
+
+      <div class="controls-row">
+        <div>
+          <div class="label-inline">フォント選択</div>
+          <div id="fontSel" class="radio-list">
+            <label><input type="radio" name="font" value="A" checked> かっこいい系</label>
+            <label><input type="radio" name="font" value="B"> かわいい系</label>
+            <label><input type="radio" name="font" value="C"> ゲーム系</label>
+            <label><input type="radio" name="font" value="D"> おしゃれ系</label>
+          </div>
+        </div>
+
+        <div>
+          <div class="label-inline">文字色</div>
+          <div id="colorSel" class="radio-list color-list">
+            <label style="color:#000"><input type="radio" name="color" value="#000000" checked> ブラック</label>
+            <label style="color:#007bff"><input type="radio" name="color" value="#007bff"> ブルー</label>
+            <label style="color:#ff0000"><input type="radio" name="color" value="#ff0000"> レッド</label>
+            <label style="color:#ff4da6"><input type="radio" name="color" value="#ff4da6"> ピンク</label>
+            <label style="color:#ff8c00"><input type="radio" name="color" value="#ff8c00"> オレンジ</label>
+            <label style="color:#0b6623"><input type="radio" name="color" value="#0b6623"> グリーン</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button id="btnRender">画像を作成</button>
+      </div>
+
+      <div style="margin-top:10px;">
+        <button id="btnDownload">自己紹介カードを保存</button>
+      </div>
+    </section>
+
+    <section class="preview-column">
+      <div class="canvas-wrap">
+        <canvas id="cardCanvas" width="1244" height="1904"></canvas>
+      </div>
+      <p class="note">※ プレビューはそのまま生成解像度 (1244×1904) です。ダウンロードでPNGが保存されます。</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
