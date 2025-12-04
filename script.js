@@ -1,11 +1,11 @@
 // script.js
-// card_base.png (1244x1904) に座標通りに描画
+// card_base1.png (1244x1904) に座標通りに描画
 
 const CONFIG = {
   canvasW: 1244,
   canvasH: 1904,
 
-  /* ▼ テキスト枠（card_sumple3 の実座標） ▼ */
+  /* ▼ テキスト枠（card_sumple2 の実座標） ▼ */
   name:       { x:417, y:280,  w:732, h:94  },
   playerId:   { x:420, y:460,  w:729, h:87  },
   guild:      { x:66,  y:932,  w:618, h:74  },
@@ -86,6 +86,7 @@ btnDownload.addEventListener('click', downloadPNG);
 btnShareX.onclick = () => {
   const tweet =
     "(下記ハッシュタグは消さずに保存した画像を添付して使用してね)\n" +
+    
     "#スタレゾ #スタレゾ自己紹介カード\n" +
     "作成はコチラから👇\n" +
     "https://zeroone91.github.io/star-resonance-id-maker/";
