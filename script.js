@@ -1,21 +1,22 @@
 // script.js
-// card_base1.png(1244x1904) を背景にして指定座標へ描画
+// card_base.png(1244x1904) を背景にして指定座標へ描画
 
 const CONFIG = {
   canvasW: 1244,
   canvasH: 1904,
 
-  // テキスト枠（card_sumple2 の赤枠から取得）
-  name:       { x:417, y:299,  w:732, h:94  },   // NAME
-  playerId:   { x:510, y:453,  w:639, h:87  },   // ID
+  // テキスト枠（card_sumple3 の赤枠から取得）
+  // ※わずかに余白を持たせるため、パディングは関数側で調整
+  name:       { x:417, y:280,  w:732, h:94  },   // NAME
+  playerId:   { x:420, y:460,  w:729, h:87  },   // ID
   guild:      { x:66,  y:932,  w:618, h:74  },   // Guild
-  playStyle:  { x:70,  y:1098, w:616, h:46  },   // Play Style
-  playTime:   { x:724, y:1098, w:456, h:46  },   // Play Time
-  freeComment:{ x:70,  y:1222, w:1106,h:120 },   // Free Comment
+  playStyle:  { x:70,  y:1097, w:616, h:66  },   // Play Style
+  playTime:   { x:724, y:1095, w:456, h:67  },   // Play Time
+  freeComment:{ x:70,  y:1242, w:1106,h:120 },   // Free Comment
 
   // 画像枠
   userIcon:   { x:60,  y:213,  w:324, h:324 },   // USER ICON
-  freePhoto:  { x:484, y:1374, w:658, h:368 },   // FREE PHOTO
+  freePhoto:  { x:387, y:1397, w:776, h:434 },   // FREE PHOTO
 
   // Classチェック（□の中央）
   classChecks: [
@@ -36,8 +37,8 @@ const CONFIG = {
     { x:1096,y:968, w:47, h:47 }
   ],
 
-  basePath:  'card_base1.png',
-  checkPath: 'check.png'    // リポジトリ直下に check.png を置く
+  basePath:  'card_base.png',  // ★ GitHub にこの名前でアップロードしてね
+  checkPath: 'check.png'       // ★ チェック画像
 };
 
 // DOM 取得
@@ -109,7 +110,7 @@ function drawPreview() {
     );
   }
 
-  // クラスチェック（チェックのみ。クラス名文字は描画しない）
+  // クラスチェック（チェックのみ。クラス名は描画しない）
   const classCheckboxes = Array.from(
     document.querySelectorAll('#classList input[type=checkbox]')
   );
@@ -147,7 +148,7 @@ function drawPreview() {
   drawAutoCenteredText(ctx, inpPlayStyle.value.trim(), CONFIG.playStyle, fontFamily, colorHex);
   drawAutoCenteredText(ctx, inpPlayTime.value.trim(),  CONFIG.playTime,  fontFamily, colorHex);
 
-  // フリーコメント：左寄せ・自動改行
+  // フリーコメント：左寄せ・自動改行（なるべく大きいサイズから調整）
   drawAutoWrappedLeftText(ctx, inpComment.value.trim(), CONFIG.freeComment, fontFamily, colorHex);
 }
 
@@ -187,9 +188,9 @@ function drawImageCover(ctx, img, x, y, w, h) {
   ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
 }
 
-// チェックマーク描画
+// チェックマーク描画（□の中央に）
 function drawCheckAt(ctx, rect) {
-  const size = Math.min(rect.w, rect.h);
+  const size = Math.min(rect.w, rect.h) - 4;  // 枠より少し小さめ
   const cx = rect.x + rect.w / 2;
   const cy = rect.y + rect.h / 2;
 
@@ -222,11 +223,12 @@ function drawCheckAt(ctx, rect) {
 function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex) {
   if (!text) return;
 
-  const padding = 6;
-  const maxW = box.w - padding*2;
-  const maxH = box.h - padding*2;
+  const paddingX = 12;
+  const paddingY = 8;
+  const maxW = box.w - paddingX*2;
+  const maxH = box.h - paddingY*2;
 
-  let size = Math.min(64, maxH + 10);
+  let size = Math.min(64, maxH + 12);   // なるべく大きいところから
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'center';
 
@@ -250,12 +252,13 @@ function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex) {
 function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex) {
   if (!text) return;
 
-  const padding = 6;
-  const maxW = box.w - padding*2;
-  const maxH = box.h - padding*2;
+  const paddingX = 12;
+  const paddingY = 8;
+  const maxW = box.w - paddingX*2;
+  const maxH = box.h - paddingY*2;
 
   text = text.replace(/\r/g,'').trim();
-  let size = 24;
+  let size = 36;  // まずは大きめからスタート
 
   ctx.textBaseline = 'top';
   ctx.textAlign = 'left';
@@ -272,8 +275,8 @@ function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex) {
   ctx.fillStyle = colorHex;
 
   const lines = wrapTextLines(ctx, text, maxW);
-  let y = box.y + padding;
-  const x = box.x + padding;
+  let y = box.y + paddingY;
+  const x = box.x + paddingX;
   const lineHeight = size + 6;
 
   for (const line of lines) {
