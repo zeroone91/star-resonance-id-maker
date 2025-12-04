@@ -5,7 +5,7 @@ const CONFIG = {
   canvasW: 1244,
   canvasH: 1904,
 
-  /* ▼ テキスト枠（card_sumple2 の実座標） ▼ */
+  /* ▼ テキスト枠（card_sample2 の実座標） ▼ */
   name:       { x:417, y:280,  w:732, h:94  },
   playerId:   { x:420, y:460,  w:729, h:87  },
   guild:      { x:66,  y:932,  w:618, h:74  },
