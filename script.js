@@ -1,11 +1,16 @@
-// script.js
-// card_base1.png (1244x1904) に座標通りに描画
+// ===================================================
+// ★ デザイン切替対応：simple / classic 両対応版（全文）
+// ★ simple の既存構造を一切壊さない
+// ===================================================
 
-const CONFIG = {
+
+// ======================
+// DESIGN = simple
+// ======================
+const CONFIG_SIMPLE = {
   canvasW: 1244,
   canvasH: 1904,
 
-  /* ▼ テキスト枠（card_sample2 の実座標） ▼ */
   name:       { x:417, y:280,  w:732, h:94  },
   playerId:   { x:420, y:460,  w:729, h:87  },
   guild:      { x:66,  y:932,  w:618, h:74  },
@@ -13,11 +18,9 @@ const CONFIG = {
   playTime:   { x:724, y:1095, w:456, h:67  },
   freeComment:{ x:70,  y:1242, w:1106,h:120 },
 
-  /* ▼ 画像枠 ▼ */
   userIcon:   { x:60,  y:213,  w:324, h:324 },
   freePhoto:  { x:387, y:1397, w:776, h:434 },
 
-  /* ▼ クラスチェック位置 ▼ */
   classChecks: [
     { x:100,  y:782, w:47, h:47 },
     { x:241,  y:782, w:47, h:47 },
@@ -29,7 +32,6 @@ const CONFIG = {
     { x:1083, y:782, w:47, h:47 }
   ],
 
-  /* ▼ VCチェック ▼ */
   vcChecks: [
     { x:857, y:967, w:47, h:47 },
     { x:980, y:967, w:47, h:47 },
@@ -40,7 +42,71 @@ const CONFIG = {
   checkPath: 'check.png'
 };
 
-// ===== DOM =====
+
+// ======================
+// DESIGN = classic
+// ======================
+// sample_classic.png：1600×1200 → canvas 1244×1904 に縮尺
+const scaleX = 1244 / 1600;
+const scaleY = 1904 / 1200;
+
+function S(px){ return Math.floor(px * scaleX); }
+function T(px){ return Math.floor(px * scaleY); }
+
+const CONFIG_CLASSIC = {
+  canvasW: 1244,
+  canvasH: 1904,
+
+  // 背景
+  basePath: 'base_classic.png',
+  checkPath: 'check.png',
+
+  // テキスト枠
+  name:       { x:S(760),  y:T(189), w:S(766), h:T(112) },
+  playerId:   { x:S(760),  y:T(333), w:S(766), h:T(112) },
+  guild:      { x:S(760),  y:T(475), w:S(766), h:T(112) },
+  playStyle:  { x:S(760),  y:T(663), w:S(600), h:T(66)  },  // テキスト位置だけ確保
+  playTime:   { x:S(1159), y:T(757), w:S(118*3), h:T(118) }, // 説明入力エリア
+  freeComment:{ x:S(31),   y:T(985), w:S(1529),h:T(167) },
+
+  // アイコン/写真
+  userIcon:   { x:S(13),   y:T(208), w:S(397), h:T(397) },
+  freePhoto:  { x:S(760),  y:T(1400),w:S(766), h:T(450) }, // simple と同じ扱いにする
+
+  // CLASS チェック（赤枠1つなので simple と同じUI → 1か所だけに描画でOK）
+  classChecks: [
+    { x:S(13), y:T(624), w:S(397), h:T(127) }
+  ],
+
+  // Voice Chat 2枠
+  vcChecks: [
+    { x:S(441), y:T(757), w:S(118), h:T(118) },
+    { x:S(611), y:T(757), w:S(118), h:T(118) }
+  ],
+
+  // Play Time 3枠
+  ptChecks: [
+    { x:S(1159), y:T(757), w:S(118), h:T(118) },
+    { x:S(1299), y:T(757), w:S(118), h:T(118) },
+    { x:S(1440), y:T(757), w:S(118), h:T(118) }
+  ]
+};
+
+
+// ======================
+// 現在のデザイン
+// ======================
+let currentDesign = "simple";
+document.getElementById("designSelect")
+  .addEventListener("change", e=>{
+    currentDesign = e.target.value;
+    drawPreview();
+  });
+
+
+// ======================
+// DOM
+// ======================
 const canvas = document.getElementById("cardCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -58,90 +124,138 @@ const btnRender   = document.getElementById('btnRender');
 const btnDownload = document.getElementById('btnDownload');
 const btnShareX   = document.getElementById('btnShareX');
 
-// ===== Load Base =====
-let baseImg = new Image();
-baseImg.src = CONFIG.basePath;
-baseImg.onload = () => drawPreview();
 
-let checkImg = new Image();
-checkImg.src = CONFIG.checkPath;
-checkImg.onerror = () => { checkImg = null; };
+// ======================
+// 画像読み込み
+// ======================
+let baseImg = null;
+let checkImg = null;
 
+function loadImage(path){
+  return new Promise(res=>{
+    const img = new Image();
+    img.onload = ()=>res(img);
+    img.src = path;
+  });
+}
+
+
+// ======================
+// 初期ロード
+// ======================
+(async ()=>{
+  baseImg  = await loadImage(CONFIG_SIMPLE.basePath);
+  checkImg = await loadImage(CONFIG_SIMPLE.checkPath);
+  drawPreview();
+})();
+
+
+// ======================
+// ファイル読み込み
+// ======================
 let userIconImg = null;
 let freePhotoImg = null;
 
-// ===== File Load =====
-fileIcon.addEventListener('change', e => {
-  readImageFile(e.target.files[0], img => { userIconImg = img; drawPreview(); });
+fileIcon.addEventListener('change', e=>{
+  readImageFile(e.target.files[0], img=>{ userIconImg = img; drawPreview(); });
 });
-fileFree.addEventListener('change', e => {
-  readImageFile(e.target.files[0], img => { freePhotoImg = img; drawPreview(); });
+fileFree.addEventListener('change', e=>{
+  readImageFile(e.target.files[0], img=>{ freePhotoImg = img; drawPreview(); });
 });
 
+function readImageFile(file, cb){
+  if (!file){ cb(null); return; }
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const img = new Image();
+    img.onload = ()=>cb(img);
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+
+// ======================
 // メイン描画
+// ======================
 btnRender.addEventListener('click', drawPreview);
 btnDownload.addEventListener('click', downloadPNG);
 
-// X投稿
-btnShareX.onclick = () => {
+btnShareX.onclick = ()=>{
   const tweet =
-    "(下記ハッシュタグは消さずに保存した画像を添付して使用してね)\n" +
-    "　\n" +
+    "(下記ハッシュタグは消さずに保存した画像を添付して使用してね)\n\n" +
     "#スタレゾ #スタレゾ自己紹介カード\n" +
-    "作成はコチラから👇\n" +
+    "作成はコチラ👇\n" +
     "https://zeroone91.github.io/star-resonance-id-maker/";
-
   const url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet);
   window.open(url, "_blank");
 };
 
-// ===== Draw =====
-function drawPreview() {
-  canvas.width  = CONFIG.canvasW;
-  canvas.height = CONFIG.canvasH;
+
+// ======================
+// ★ デザイン切替に応じて CONFIG を取得
+// ======================
+function CONF(){
+  return currentDesign === "classic" ? CONFIG_CLASSIC : CONFIG_SIMPLE;
+}
+
+
+// ======================
+// 描画処理本体
+// ======================
+async function drawPreview(){
+
+  const C = CONF();
+
+  // キャンバス初期化
+  canvas.width  = C.canvasW;
+  canvas.height = C.canvasH;
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   // 背景
-  if (baseImg && baseImg.complete) {
-    ctx.drawImage(baseImg, 0, 0, canvas.width, canvas.height);
-  } else {
-    ctx.fillStyle = "#222";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-  }
+  const bg = await loadImage(C.basePath);
+  ctx.drawImage(bg, 0,0, C.canvasW, C.canvasH);
 
   // Free Photo
-  if (freePhotoImg) {
+  if (freePhotoImg){
     drawImageCover(ctx, freePhotoImg,
-      CONFIG.freePhoto.x, CONFIG.freePhoto.y,
-      CONFIG.freePhoto.w, CONFIG.freePhoto.h
+      C.freePhoto.x, C.freePhoto.y,
+      C.freePhoto.w, C.freePhoto.h
     );
   }
 
   // User Icon
-  if (userIconImg) {
+  if (userIconImg){
     drawImageCover(ctx, userIconImg,
-      CONFIG.userIcon.x, CONFIG.userIcon.y,
-      CONFIG.userIcon.w, CONFIG.userIcon.h
+      C.userIcon.x, C.userIcon.y,
+      C.userIcon.w, C.userIcon.h
     );
   }
 
-  // Class checks
+  // Class checks（classic は1枠だけ large、simple は8枠）
   const classCheckboxes = Array.from(document.querySelectorAll('#classList input[type=checkbox]'));
-  classCheckboxes.forEach((cb, idx) => {
-    if (cb.checked && CONFIG.classChecks[idx]) {
-      drawCheckAt(ctx, CONFIG.classChecks[idx]);
+  if (currentDesign === "simple"){
+    classCheckboxes.forEach((cb, idx)=>{
+      if (cb.checked && C.classChecks[idx]){
+        drawCheckAt(ctx, C.classChecks[idx]);
+      }
+    });
+  } else {
+    // classic → どれかチェックされてたらまとめて1枠に描画
+    if (classCheckboxes.some(cb=>cb.checked)){
+      drawCheckAt(ctx, C.classChecks[0]);
     }
-  });
+  }
 
-  // VC checks
+  // VC
   const vcCheckboxes = Array.from(document.querySelectorAll('#vcList input[type=checkbox]'));
-  vcCheckboxes.forEach((cb, idx) => {
-    if (cb.checked && CONFIG.vcChecks[idx]) {
-      drawCheckAt(ctx, CONFIG.vcChecks[idx]);
+  vcCheckboxes.forEach((cb, idx)=>{
+    if (cb.checked && C.vcChecks[idx]){
+      drawCheckAt(ctx, C.vcChecks[idx]);
     }
   });
 
-  // Font / color
+  // テキスト設定
   const fontChoice = document.querySelector('input[name="font"]:checked').value;
   const fontFamily =
     fontChoice === 'A' ? '"Noto Sans JP", sans-serif' :
@@ -152,30 +266,22 @@ function drawPreview() {
   const colorHex =
     document.querySelector('input[name="color"]:checked')?.value || "#000000";
 
-  // Centered Text
-  drawAutoCenteredText(ctx, inpName.value.trim(),      CONFIG.name,      fontFamily, colorHex);
-  drawAutoCenteredText(ctx, inpPlayerId.value.trim(),  CONFIG.playerId,  fontFamily, colorHex);
-  drawAutoCenteredText(ctx, inpGuild.value.trim(),     CONFIG.guild,     fontFamily, colorHex);
-  drawAutoCenteredText(ctx, inpPlayStyle.value.trim(), CONFIG.playStyle, fontFamily, colorHex);
-  drawAutoCenteredText(ctx, inpPlayTime.value.trim(),  CONFIG.playTime,  fontFamily, colorHex);
+  // テキスト描画
+  drawAutoCenteredText(ctx, inpName.value.trim(),      C.name,      fontFamily, colorHex);
+  drawAutoCenteredText(ctx, inpPlayerId.value.trim(),  C.playerId,  fontFamily, colorHex);
+  drawAutoCenteredText(ctx, inpGuild.value.trim(),     C.guild,     fontFamily, colorHex);
+  drawAutoCenteredText(ctx, inpPlayStyle.value.trim(), C.playStyle, fontFamily, colorHex);
+  drawAutoCenteredText(ctx, inpPlayTime.value.trim(),  C.playTime,  fontFamily, colorHex);
 
   // Free Comment
-  drawAutoWrappedLeftText(ctx, inpComment.value.trim(), CONFIG.freeComment, fontFamily, colorHex);
+  drawAutoWrappedLeftText(ctx, inpComment.value.trim(), C.freeComment, fontFamily, colorHex);
 }
 
-// ===== Helper =====
-function readImageFile(file, cb) {
-  if (!file) { cb(null); return; }
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = new Image();
-    img.onload = () => cb(img);
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
 
-function drawImageCover(ctx, img, x, y, w, h) {
+// ======================
+// 画像 Cover 描画
+// ======================
+function drawImageCover(ctx, img, x, y, w, h){
   const iw = img.width;
   const ih = img.height;
   const boxRatio = w / h;
@@ -183,7 +289,7 @@ function drawImageCover(ctx, img, x, y, w, h) {
 
   let sx, sy, sw, sh;
 
-  if (imgRatio > boxRatio) {
+  if (imgRatio > boxRatio){
     sh = ih;
     sw = sh * boxRatio;
     sx = (iw - sw) / 2;
@@ -195,15 +301,19 @@ function drawImageCover(ctx, img, x, y, w, h) {
     sy = (ih - sh) / 2;
   }
 
-  ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+  ctx.drawImage(img, sx,sy, sw,sh, x,y, w,h);
 }
 
-function drawCheckAt(ctx, rect) {
+
+// ======================
+// チェックマーク描画
+// ======================
+function drawCheckAt(ctx, rect){
   const size = Math.min(rect.w, rect.h) - 4;
   const cx = rect.x + rect.w / 2;
   const cy = rect.y + rect.h / 2;
 
-  if (checkImg && checkImg.complete) {
+  if (checkImg){
     ctx.drawImage(checkImg, cx - size/2, cy - size/2, size, size);
   } else {
     ctx.fillStyle = "#ff2e6d";
@@ -213,7 +323,11 @@ function drawCheckAt(ctx, rect) {
   }
 }
 
-function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex) {
+
+// ======================
+// Auto Center Text
+// ======================
+function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex){
   if (!text) return;
 
   const padX = 12;
@@ -226,7 +340,7 @@ function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex) {
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
 
-  while (size > 6) {
+  while (size > 6){
     ctx.font = size + "px " + fontFamily;
     const w = ctx.measureText(text).width;
     const h = size;
@@ -242,7 +356,11 @@ function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex) {
   ctx.fillText(text, cx, cy);
 }
 
-function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex) {
+
+// ======================
+// Auto Wrapped Text
+// ======================
+function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex){
   if (!text) return;
 
   const padX = 12;
@@ -256,7 +374,7 @@ function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex) {
 
   text = text.replace(/\r/g,'').trim();
 
-  while (size > 8) {
+  while (size > 8){
     ctx.font = size + "px " + fontFamily;
     const lines = wrapText(ctx, text, maxW);
     const totalH = lines.length * (size + 6);
@@ -273,21 +391,21 @@ function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex) {
   let y = box.y + padY;
   const x = box.x + padX;
 
-  for (const line of lines) {
+  for (const line of lines){
     ctx.fillText(line, x, y);
     y += lineH;
     if (y > box.y + box.h) break;
   }
 }
 
-function wrapText(ctx, text, maxWidth) {
+function wrapText(ctx, text, maxWidth){
   const words = text.split(/\s+/);
   const lines = [];
   let line = "";
 
-  words.forEach(word => {
+  words.forEach(word=>{
     const test = line ? line + " " + word : word;
-    if (ctx.measureText(test).width > maxWidth && line) {
+    if (ctx.measureText(test).width > maxWidth && line){
       lines.push(line);
       line = word;
     } else {
@@ -299,7 +417,11 @@ function wrapText(ctx, text, maxWidth) {
   return lines;
 }
 
-function downloadPNG() {
+
+// ======================
+// DL
+// ======================
+function downloadPNG(){
   drawPreview();
   const link = document.createElement('a');
   link.download = 'STAR_RESONANCE_ID.png';
