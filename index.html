@@ -4,183 +4,211 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>STAR RESONANCE ID MAKER</title>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=M+PLUS+Rounded+1c:wght@400;700&family=Yusei+Magic&family=DotGothic16&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+<div class="app">
 
-<header>
-  <h1>STAR RESONANCE ID MAKER</h1>
+  <!-- ▼ Header ▼ -->
+  <header class="app-header">
+    <h1>STAR RESONANCE ID MAKER <span class="badge">v2</span></h1>
 
-  <!-- デザイン切替 -->
-  <div class="design-switch">
-    <label>デザイン：</label>
-    <select id="designSelect">
-      <option value="simple">simple（従来）</option>
-      <option value="classic">classic</option>
-    </select>
-  </div>
-</header>
-
-<main class="container">
-
-  <!-- ▼▼▼ simple 用フォーム ▼▼▼ -->
-  <section id="formSimple" class="form-column">
-
-    <label>🔴プレイヤー名
-      <input id="inpName_s" type="text" placeholder="例：ロローラ">
-    </label>
-
-    <label>🔴プレイヤーID
-      <input id="inpPlayerId_s" type="text" placeholder="例：00001234">
-    </label>
-
-    <label>🔴所属ギルド
-      <input id="inpGuild_s" type="text" placeholder="例：カナミア族">
-    </label>
-
-    <div class="section-title">🔴クラス（複数可）</div>
-    <div id="classList_s" class="class-grid">
-      <label><input type="checkbox" value="ストームブレイド">ストームブレイド</label>
-      <label><input type="checkbox" value="ヘヴィガーディアン">ヘヴィガーディアン</label>
-      <label><input type="checkbox" value="ディバインアーチャー">ディバインアーチャー</label>
-      <label><input type="checkbox" value="ゲイルランサー">ゲイルランサー</label>
-      <label><input type="checkbox" value="シールドファイター">シールドファイター</label>
-      <label><input type="checkbox" value="ヴァーダントオラクル">ヴァーダントオラクル</label>
-      <label><input type="checkbox" value="フロストメイジ">フロストメイジ</label>
-      <label><input type="checkbox" value="ビートパフォーマー">ビートパフォーマー</label>
+    <div class="header-controls">
+      <label for="designSelect">デザイン：</label>
+      <select id="designSelect">
+        <option value="simple">simple（従来）</option>
+        <option value="classic">classic</option>
+      </select>
     </div>
+  </header>
 
-    <label>🔴プレイスタイル
-      <input id="inpPlayStyle_s" type="text" placeholder="例：エンジョイ / ガチ勢">
-    </label>
+  <main class="app-main">
 
-    <label>🔴主な活動時間
-      <input id="inpPlayTime_s" type="text" placeholder="例：日中メイン / 夜間メイン">
-    </label>
+    <!-- ▼ 左：フォームパネル ▼ -->
+    <div class="panel">
 
-    <label>🔴ボイスチャット（複数可）</label>
-    <div id="vcList_s" class="check-inline">
-      <label><input type="checkbox" value="Discord">Discord</label>
-      <label><input type="checkbox" value="LINE">LINE</label>
-      <label><input type="checkbox" value="NG">NG</label>
+      <!-- ■ simpleフォーム（デフォルト表示） -->
+      <div id="formSimple">
+
+        <h2>simple 入力フォーム</h2>
+
+        <div class="form-group">
+          <label>🔴プレイヤー名</label>
+          <input id="inpName_s" type="text" placeholder="例：ロローラ">
+        </div>
+
+        <div class="form-group">
+          <label>🔴プレイヤーID</label>
+          <input id="inpPlayerId_s" type="text" placeholder="例：00001234">
+        </div>
+
+        <div class="form-group">
+          <label>🔴所属ギルド</label>
+          <input id="inpGuild_s" type="text" placeholder="例：カナミア族">
+        </div>
+
+        <h2>🔴クラス（複数選択可）</h2>
+        <div class="form-group" id="classList_s">
+          <label><input type="checkbox" value="ストームブレイド">ストームブレイド</label><br>
+          <label><input type="checkbox" value="ヘヴィガーディアン">ヘヴィガーディアン</label><br>
+          <label><input type="checkbox" value="ディバインアーチャー">ディバインアーチャー</label><br>
+          <label><input type="checkbox" value="ゲイルランサー">ゲイルランサー</label><br>
+          <label><input type="checkbox" value="シールドファイター">シールドファイター</label><br>
+          <label><input type="checkbox" value="ヴァーダントオラクル">ヴァーダントオラクル</label><br>
+          <label><input type="checkbox" value="フロストメイジ">フロストメイジ</label><br>
+          <label><input type="checkbox" value="ビートパフォーマー">ビートパフォーマー</label>
+        </div>
+
+        <div class="form-group">
+          <label>🔴プレイスタイル</label>
+          <input id="inpPlayStyle_s" type="text" placeholder="例：エンジョイ / ガチ勢">
+        </div>
+
+        <div class="form-group">
+          <label>🔴主な活動時間</label>
+          <input id="inpPlayTime_s" type="text" placeholder="例：日中メイン / 夜間メイン">
+        </div>
+
+        <h2>🔴ボイスチャット（複数選択可）</h2>
+        <div class="form-group" id="vcList_s">
+          <label><input type="checkbox" value="Discord">Discord</label><br>
+          <label><input type="checkbox" value="LINE">LINE</label><br>
+          <label><input type="checkbox" value="NG">NG</label>
+        </div>
+
+        <div class="form-group">
+          <label>🔴フリーコメント</label>
+          <textarea id="inpComment_s" rows="3" placeholder="例：よろしくお願いします！"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>🔴キャラクターアイコン</label>
+          <input id="fileIcon_s" type="file" accept="image/*">
+        </div>
+
+        <div class="form-group">
+          <label>🔴フリーフォト</label>
+          <input id="fileFree_s" type="file" accept="image/*">
+        </div>
+
+        <button class="primary-button btnRender" data-design="simple">
+          画像を作成
+        </button>
+
+      </div>
+      <!-- ▲ simpleフォーム終了 ▲ -->
+
+
+
+      <!-- ■ classic フォーム（初期は非表示） -->
+      <div id="formClassic" class="hide">
+
+        <h2>classic 入力フォーム</h2>
+
+        <div class="form-group">
+          <label>🔵プレイヤー名</label>
+          <input id="inpName_c" type="text" placeholder="例：ロローラ">
+        </div>
+
+        <div class="form-group">
+          <label>🔵プレイヤーID</label>
+          <input id="inpPlayerId_c" type="text" placeholder="例：00001234">
+        </div>
+
+        <div class="form-group">
+          <label>🔵所属ギルド</label>
+          <input id="inpGuild_c" type="text" placeholder="例：カナミア族">
+        </div>
+
+        <h2>🔵クラス（最大3つ選択可）</h2>
+        <div class="form-group" id="classList_c">
+          <label><input type="checkbox" value="ストームブレイド">ストームブレイド</label><br>
+          <label><input type="checkbox" value="ヘヴィガーディアン">ヘヴィガーディアン</label><br>
+          <label><input type="checkbox" value="ディバインアーチャー">ディバインアーチャー</label><br>
+          <label><input type="checkbox" value="ゲイルランサー">ゲイルランサー</label><br>
+          <label><input type="checkbox" value="シールドファイター">シールドファイター</label><br>
+          <label><input type="checkbox" value="ヴァーダントオラクル">ヴァーダントオラクル</label><br>
+          <label><input type="checkbox" value="フロストメイジ">フロストメイジ</label><br>
+          <label><input type="checkbox" value="ビートパフォーマー">ビートパフォーマー</label>
+        </div>
+
+        <h2>🔵ボイスチャット（最大2つ選択可）</h2>
+        <div class="form-group" id="vcList_c">
+          <label><input type="checkbox" value="Discord">Discord</label><br>
+          <label><input type="checkbox" value="LINE">LINE</label><br>
+          <label><input type="checkbox" value="NG">NG</label>
+        </div>
+
+        <h2>🔵主な活動時間（最大3つ選択可）</h2>
+        <div class="form-group" id="ptList_c">
+          <label><input type="checkbox" value="早朝">早朝</label><br>
+          <label><input type="checkbox" value="昼間">昼間</label><br>
+          <label><input type="checkbox" value="夕方">夕方</label><br>
+          <label><input type="checkbox" value="夜間">夜間</label><br>
+          <label><input type="checkbox" value="深夜">深夜</label>
+        </div>
+
+        <h2>🔵プレイスタイル（いずれか選択）</h2>
+
+        <div class="ps-label-row">
+          <div class="ps-label">エンジョイ</div>
+          <div class="ps-label"></div>
+          <div class="ps-label">まったり</div>
+          <div class="ps-label"></div>
+          <div class="ps-label">ガチ勢</div>
+        </div>
+
+        <div class="ps-radio-row" id="psList_c">
+          <label><input type="radio" name="ps_c" value="1"></label>
+          <label><input type="radio" name="ps_c" value="2"></label>
+          <label><input type="radio" name="ps_c" value="3"></label>
+          <label><input type="radio" name="ps_c" value="4"></label>
+          <label><input type="radio" name="ps_c" value="5"></label>
+        </div>
+
+        <div class="form-group">
+          <label>🔵フリーコメント</label>
+          <textarea id="inpComment_c" rows="3" placeholder="例：よろしくお願いします！"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>🔵キャラクターアイコン</label>
+          <input id="fileIcon_c" type="file" accept="image/*">
+        </div>
+
+        <!-- classic はフリーフォトなし -->
+
+        <button class="primary-button btnRender" data-design="classic">
+          画像を作成
+        </button>
+
+      </div>
+      <!-- ▲ classicフォーム終了 ▲ -->
+
     </div>
+    <!-- ▲ 左パネル終了 ▲ -->
 
-    <label>🔴フリーコメント
-      <textarea id="inpComment_s" rows="4" placeholder="例：よろしくお願いします！"></textarea>
-    </label>
 
-    <label>🔴キャラクターアイコン
-      <input id="fileIcon_s" type="file" accept="image/*">
-    </label>
 
-    <label>🔴フリーフォト
-      <input id="fileFree_s" type="file" accept="image/*">
-    </label>
+    <!-- ▼ 右：プレビューパネル ▼ -->
+    <div class="panel panel-preview">
+      <div class="preview-wrapper">
+        <canvas id="cardCanvas" width="1244" height="1904"></canvas>
+      </div>
 
-    <div class="action-row">
-      <button class="btnRender" data-design="simple">画像を作成</button>
+      <button id="btnDownload" class="primary-button">
+        自己紹介カードを保存
+      </button>
+
     </div>
+    <!-- ▲ 右パネル終了 ▲ -->
 
-  </section>
-  <!-- ▲▲▲ simple 終了 ▲▲▲ -->
-
-
-
-  <!-- ▼▼▼ classic 用フォーム ▼▼▼ -->
-  <section id="formClassic" class="form-column hide">
-
-    <label>🔵プレイヤー名
-      <input id="inpName_c" type="text" placeholder="例：ロローラ">
-    </label>
-
-    <label>🔵プレイヤーID
-      <input id="inpPlayerId_c" type="text" placeholder="例：00001234">
-    </label>
-
-    <label>🔵所属ギルド
-      <input id="inpGuild_c" type="text" placeholder="例：カナミア族">
-    </label>
-
-    <div class="section-title">🔵クラス（最大3つ選択可）</div>
-    <div id="classList_c" class="class-grid">
-      <label><input type="checkbox" value="ストームブレイド">ストームブレイド</label>
-      <label><input type="checkbox" value="ヘヴィガーディアン">ヘヴィガーディアン</label>
-      <label><input type="checkbox" value="ディバインアーチャー">ディバインアーチャー</label>
-      <label><input type="checkbox" value="ゲイルランサー">ゲイルランサー</label>
-      <label><input type="checkbox" value="シールドファイター">シールドファイター</label>
-      <label><input type="checkbox" value="ヴァーダントオラクル">ヴァーダントオラクル</label>
-      <label><input type="checkbox" value="フロストメイジ">フロストメイジ</label>
-      <label><input type="checkbox" value="ビートパフォーマー">ビートパフォーマー</label>
-    </div>
-
-    <div class="section-title">🔵VC（最大2つ選択可）</div>
-    <div id="vcList_c" class="check-inline">
-      <label><input type="checkbox" value="Discord">Discord</label>
-      <label><input type="checkbox" value="LINE">LINE</label>
-      <label><input type="checkbox" value="NG">NG</label>
-    </div>
-
-    <div class="section-title">🔵主な活動時間（最大3つ選択可）</div>
-    <div id="ptList_c" class="check-inline">
-      <label><input type="checkbox" value="早朝">早朝</label>
-      <label><input type="checkbox" value="昼間">昼間</label>
-      <label><input type="checkbox" value="夕方">夕方</label>
-      <label><input type="checkbox" value="夜間">夜間</label>
-      <label><input type="checkbox" value="深夜">深夜</label>
-    </div>
-
-    <div class="section-title">🔵プレイスタイル（5段階から選択）</div>
-
-    <div class="ps-label-row">
-      <div class="ps-label ps-l1">エンジョイ</div>
-      <div class="ps-label ps-l2"></div>
-      <div class="ps-label ps-l3">まったり</div>
-      <div class="ps-label ps-l4"></div>
-      <div class="ps-label ps-l5">ガチ勢</div>
-    </div>
-
-    <div id="psList_c" class="ps-radio-row">
-      <label><input type="radio" name="ps_c" value="1"></label>
-      <label><input type="radio" name="ps_c" value="2"></label>
-      <label><input type="radio" name="ps_c" value="3"></label>
-      <label><input type="radio" name="ps_c" value="4"></label>
-      <label><input type="radio" name="ps_c" value="5"></label>
-    </div>
-
-    <label>🔵フリーコメント
-      <textarea id="inpComment_c" rows="4" placeholder="例：よろしくお願いします！"></textarea>
-    </label>
-
-    <label>🔵キャラクターアイコン
-      <input id="fileIcon_c" type="file" accept="image/*">
-    </label>
-
-    <!-- classic にはフリーフォトなし -->
-
-    <div class="action-row">
-      <button class="btnRender" data-design="classic">画像を作成</button>
-    </div>
-
-  </section>
-  <!-- ▲▲▲ classic 終了 ▲▲▲ -->
+  </main>
 
 
-
-  <section class="preview-column">
-    <div class="canvas-wrap">
-      <canvas id="cardCanvas" width="1244" height="1904"></canvas>
-    </div>
-
-    <div class="action-row">
-      <button id="btnDownload">自己紹介カードを保存</button>
-    </div>
-  </section>
-
-</main>
+  <footer class="app-footer">© ZEROONE</footer>
+</div>
 
 <script src="script.js"></script>
 </body>
