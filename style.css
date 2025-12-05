@@ -48,12 +48,16 @@ h1 {
 
 .preview-area {
   width: 500px;
+  border: 1px solid #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;  /* ★ 追加：はみ出し防止 */
+}
+
+#cardCanvas {
+  max-width: 100%;   /* ★ 追加：プレビュー枠に合わせて縮小 */
   height: auto;
-  background: #000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid #333;
 }
 
 .label {
