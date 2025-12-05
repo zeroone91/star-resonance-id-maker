@@ -14,9 +14,18 @@
 
 <header>
   <h1>STAR RESONANCE ID MAKER</h1>
+
+  <!-- ▼▼▼ 追加したのはここだけ ▼▼▼ -->
+  <div style="margin-top:10px;">
+    <label>デザイン：</label>
+    <select id="designSelect">
+      <option value="simple">simple（既存）</option>
+      <option value="classic">classic（新規）</option>
+    </select>
+  </div>
+  <!-- ▲▲▲ 追加ここだけ ▲▲▲ -->
 </header>
 
-<!-- ▼ 使い方（追加部分） ▼ -->
 <section class="howto">
   <h2>【使い方】</h2>
   <p>① 記載したい項目を入力または選択してください<br>
@@ -26,7 +35,6 @@
      ※製作者ID・著作権マーク等を削除しなければ改変OKです
   </p>
 </section>
-<!-- ▲ 使い方ここまで ▲ -->
 
 <main class="container">
 
@@ -45,18 +53,15 @@
       <input id="inpGuild" type="text" placeholder="例：カナミア族">
     </label>
 
-    <!-- ▼ クラス（2列均等配置） ▼ -->
+    <!-- クラス -->
     <div class="section-title">🔴クラス（複数可）</div>
     <div id="classList" class="class-grid">
       <label><input type="checkbox" value="ストームブレイド"><span>ストームブレイド</span></label>
       <label><input type="checkbox" value="ヘヴィガーディアン"><span>ヘヴィガーディアン</span></label>
-
       <label><input type="checkbox" value="ディバインアーチャー"><span>ディバインアーチャー</span></label>
       <label><input type="checkbox" value="ゲイルランサー"><span>ゲイルランサー</span></label>
-
       <label><input type="checkbox" value="シールドファイター"><span>シールドファイター</span></label>
       <label><input type="checkbox" value="ヴァーダントオラクル"><span>ヴァーダントオラクル</span></label>
-
       <label><input type="checkbox" value="フロストメイジ"><span>フロストメイジ</span></label>
       <label><input type="checkbox" value="ビートパフォーマー"><span>ビートパフォーマー</span></label>
     </div>
@@ -88,7 +93,6 @@
       <input id="fileFree" type="file" accept="image/*">
     </label>
 
-    <!-- ▼ フォント選択 ▼ -->
     <div class="section-title">🔴フォント</div>
     <div class="font-grid">
       <label style="font-family:'Noto Sans JP',sans-serif">
@@ -105,7 +109,6 @@
       </label>
     </div>
 
-    <!-- ▼ 文字色 ▼ -->
     <div class="section-title">🔴文字色</div>
     <div class="color-grid">
       <label class="white-text">
@@ -128,16 +131,12 @@
       </label>
     </div>
 
-    <!-- ▼ 作成・保存ボタン ▼ -->
     <div class="action-row">
       <button id="btnRender" type="button">画像を作成</button>
     </div>
-
     <div class="action-row">
       <button id="btnDownload" type="button">自己紹介カードを保存</button>
     </div>
-
-    <!-- ▼ X投稿ボタン ▼ -->
     <div class="action-row">
       <button id="btnShareX" class="btn-x" type="button">Xで投稿する</button>
     </div>
@@ -145,8 +144,6 @@
   </section>
   <!-- ▲ 左パネル終了 ▲ -->
 
-
-  <!-- ▼ 右側プレビュー ▼ -->
   <section class="preview-column">
     <div class="canvas-wrap">
       <canvas id="cardCanvas" width="1244" height="1904"></canvas>
