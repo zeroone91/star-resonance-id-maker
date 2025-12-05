@@ -5,7 +5,7 @@
 
 
 // ======================
-// DESIGN = simple
+// DESIGN = simple（既存）
 // ======================
 const CONFIG_SIMPLE = {
   canvasW: 1244,
@@ -38,70 +38,65 @@ const CONFIG_SIMPLE = {
     { x:1096,y:968, w:47, h:47 }
   ],
 
-  basePath:  'base_simple.png',
+  basePath:  'card_base1.png',
   checkPath: 'check.png'
 };
 
 
 // ======================
-// DESIGN = classic
+// DESIGN = classic（追加）
 // ======================
-// sample_classic.png：1600×1200 → canvas 1244×1904 に縮尺
-const scaleX = 1244 / 1600;
-const scaleY = 1904 / 1200;
+// sample_classic.png：1600×1200（横長）
+// → canvas 1244×1904 の「横 fit」に合わせる
+const classicScaleX = 1244 / 1600;
+const classicScaleY = 1244 / 1600; // 高さ側も同率（縦は933pxになる）
 
-function S(px){ return Math.floor(px * scaleX); }
-function T(px){ return Math.floor(px * scaleY); }
+function CX(px){ return Math.floor(px * classicScaleX); }
+function CY(px){ return Math.floor(px * classicScaleY); }
 
 const CONFIG_CLASSIC = {
   canvasW: 1244,
   canvasH: 1904,
 
-  // 背景
   basePath: 'base_classic.png',
   checkPath: 'check.png',
 
-  // テキスト枠
-  name:       { x:S(760),  y:T(189), w:S(766), h:T(112) },
-  playerId:   { x:S(760),  y:T(333), w:S(766), h:T(112) },
-  guild:      { x:S(760),  y:T(475), w:S(766), h:T(112) },
-  playStyle:  { x:S(760),  y:T(663), w:S(600), h:T(66)  },  // テキスト位置だけ確保
-  playTime:   { x:S(1159), y:T(757), w:S(118*3), h:T(118) }, // 説明入力エリア
-  freeComment:{ x:S(31),   y:T(985), w:S(1529),h:T(167) },
+  name:       { x:CX(760),  y:CY(189), w:CX(766), h:CY(112) },
+  playerId:   { x:CX(760),  y:CY(333), w:CX(766), h:CY(112) },
+  guild:      { x:CX(760),  y:CY(475), w:CX(766), h:CY(112) },
+  playStyle:  { x:CX(760),  y:CY(663), w:CX(600), h:CY(66) },
+  playTime:   { x:CX(1159), y:CY(757), w:CX(118*3), h:CY(118) },
+  freeComment:{ x:CX(31),   y:CY(985), w:CX(1529),h:CY(167) },
 
-  // アイコン/写真
-  userIcon:   { x:S(13),   y:T(208), w:S(397), h:T(397) },
-  freePhoto:  { x:S(760),  y:T(1400),w:S(766), h:T(450) }, // simple と同じ扱いにする
+  userIcon:   { x:CX(13),   y:CY(208), w:CX(397), h:CY(397) },
+  freePhoto:  { x:CX(760),  y:CY(1400),w:CX(766), h:CY(450) },
 
-  // CLASS チェック（赤枠1つなので simple と同じUI → 1か所だけに描画でOK）
   classChecks: [
-    { x:S(13), y:T(624), w:S(397), h:T(127) }
+    { x:CX(13), y:CY(624), w:CX(397), h:CY(127) }
   ],
 
-  // Voice Chat 2枠
   vcChecks: [
-    { x:S(441), y:T(757), w:S(118), h:T(118) },
-    { x:S(611), y:T(757), w:S(118), h:T(118) }
+    { x:CX(441), y:CY(757), w:CX(118), h:CY(118) },
+    { x:CX(611), y:CY(757), w:CX(118), h:CY(118) }
   ],
 
-  // Play Time 3枠
   ptChecks: [
-    { x:S(1159), y:T(757), w:S(118), h:T(118) },
-    { x:S(1299), y:T(757), w:S(118), h:T(118) },
-    { x:S(1440), y:T(757), w:S(118), h:T(118) }
+    { x:CX(1159), y:CY(757), w:CX(118), h:CY(118) },
+    { x:CX(1299), y:CY(757), w:CX(118), h:CY(118) },
+    { x:CX(1440), y:CY(757), w:CX(118), h:CY(118) }
   ]
 };
 
 
 // ======================
-// 現在のデザイン
+// 現在デザイン
 // ======================
 let currentDesign = "simple";
-document.getElementById("designSelect")
-  .addEventListener("change", e=>{
-    currentDesign = e.target.value;
-    drawPreview();
-  });
+
+document.getElementById("designSelect").addEventListener("change", e=>{
+  currentDesign = e.target.value;
+  drawPreview();
+});
 
 
 // ======================
@@ -120,17 +115,10 @@ const inpComment   = document.getElementById('inpComment');
 const fileIcon = document.getElementById('fileIcon');
 const fileFree = document.getElementById('fileFree');
 
-const btnRender   = document.getElementById('btnRender');
-const btnDownload = document.getElementById('btnDownload');
-const btnShareX   = document.getElementById('btnShareX');
-
 
 // ======================
 // 画像読み込み
 // ======================
-let baseImg = null;
-let checkImg = null;
-
 function loadImage(path){
   return new Promise(res=>{
     const img = new Image();
@@ -141,59 +129,32 @@ function loadImage(path){
 
 
 // ======================
-// 初期ロード
-// ======================
-(async ()=>{
-  baseImg  = await loadImage(CONFIG_SIMPLE.basePath);
-  checkImg = await loadImage(CONFIG_SIMPLE.checkPath);
-  drawPreview();
-})();
-
-
-// ======================
 // ファイル読み込み
 // ======================
 let userIconImg = null;
 let freePhotoImg = null;
 
-fileIcon.addEventListener('change', e=>{
+fileIcon.onchange = e=>{
   readImageFile(e.target.files[0], img=>{ userIconImg = img; drawPreview(); });
-});
-fileFree.addEventListener('change', e=>{
+};
+fileFree.onchange = e=>{
   readImageFile(e.target.files[0], img=>{ freePhotoImg = img; drawPreview(); });
-});
+};
 
 function readImageFile(file, cb){
   if (!file){ cb(null); return; }
-  const reader = new FileReader();
-  reader.onload = e=>{
+  const r = new FileReader();
+  r.onload = e=>{
     const img = new Image();
     img.onload = ()=>cb(img);
     img.src = e.target.result;
   };
-  reader.readAsDataURL(file);
+  r.readAsDataURL(file);
 }
 
 
 // ======================
-// メイン描画
-// ======================
-btnRender.addEventListener('click', drawPreview);
-btnDownload.addEventListener('click', downloadPNG);
-
-btnShareX.onclick = ()=>{
-  const tweet =
-    "(下記ハッシュタグは消さずに保存した画像を添付して使用してね)\n\n" +
-    "#スタレゾ #スタレゾ自己紹介カード\n" +
-    "作成はコチラ👇\n" +
-    "https://zeroone91.github.io/star-resonance-id-maker/";
-  const url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet);
-  window.open(url, "_blank");
-};
-
-
-// ======================
-// ★ デザイン切替に応じて CONFIG を取得
+// 現在CONFIG
 // ======================
 function CONF(){
   return currentDesign === "classic" ? CONFIG_CLASSIC : CONFIG_SIMPLE;
@@ -201,22 +162,34 @@ function CONF(){
 
 
 // ======================
-// 描画処理本体
+// メイン描画
 // ======================
 async function drawPreview(){
 
   const C = CONF();
 
-  // キャンバス初期化
   canvas.width  = C.canvasW;
   canvas.height = C.canvasH;
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // 背景
+  // 背景読み込み
   const bg = await loadImage(C.basePath);
-  ctx.drawImage(bg, 0,0, C.canvasW, C.canvasH);
 
+  // =========================================
+  // ★ classic だけ「横幅フィット（比率維持）」で描画
+  // =========================================
+  if (currentDesign === "classic") {
+    const drawW = C.canvasW;          // =1244
+    const drawH = Math.round(1200 * (1244/1600)); // ≒933（正しい比率）
+    ctx.drawImage(bg, 0, 0, drawW, drawH);
+  } else {
+    // simple は従来どおりフル
+    ctx.drawImage(bg, 0,0, C.canvasW, C.canvasH);
+  }
+
+  // ==========================
   // Free Photo
+  // ==========================
   if (freePhotoImg){
     drawImageCover(ctx, freePhotoImg,
       C.freePhoto.x, C.freePhoto.y,
@@ -224,7 +197,9 @@ async function drawPreview(){
     );
   }
 
+  // ==========================
   // User Icon
+  // ==========================
   if (userIconImg){
     drawImageCover(ctx, userIconImg,
       C.userIcon.x, C.userIcon.y,
@@ -232,30 +207,36 @@ async function drawPreview(){
     );
   }
 
-  // Class checks（classic は1枠だけ large、simple は8枠）
-  const classCheckboxes = Array.from(document.querySelectorAll('#classList input[type=checkbox]'));
+  // ==========================
+  // CLASS チェック
+  // ==========================
+  const classList = [...document.querySelectorAll('#classList input[type=checkbox]')];
+
   if (currentDesign === "simple"){
-    classCheckboxes.forEach((cb, idx)=>{
-      if (cb.checked && C.classChecks[idx]){
-        drawCheckAt(ctx, C.classChecks[idx]);
+    classList.forEach((cb,i)=>{
+      if (cb.checked && C.classChecks[i]){
+        drawCheckAt(ctx, C.classChecks[i]);
       }
     });
   } else {
-    // classic → どれかチェックされてたらまとめて1枠に描画
-    if (classCheckboxes.some(cb=>cb.checked)){
+    if (classList.some(cb=>cb.checked)){
       drawCheckAt(ctx, C.classChecks[0]);
     }
   }
 
+  // ==========================
   // VC
-  const vcCheckboxes = Array.from(document.querySelectorAll('#vcList input[type=checkbox]'));
-  vcCheckboxes.forEach((cb, idx)=>{
-    if (cb.checked && C.vcChecks[idx]){
-      drawCheckAt(ctx, C.vcChecks[idx]);
+  // ==========================
+  const vcList = [...document.querySelectorAll('#vcList input[type=checkbox]')];
+  vcList.forEach((cb,i)=>{
+    if (cb.checked && C.vcChecks[i]){
+      drawCheckAt(ctx, C.vcChecks[i]);
     }
   });
 
+  // ==========================
   // テキスト設定
+  // ==========================
   const fontChoice = document.querySelector('input[name="font"]:checked').value;
   const fontFamily =
     fontChoice === 'A' ? '"Noto Sans JP", sans-serif' :
@@ -266,7 +247,9 @@ async function drawPreview(){
   const colorHex =
     document.querySelector('input[name="color"]:checked')?.value || "#000000";
 
+  // ==========================
   // テキスト描画
+  // ==========================
   drawAutoCenteredText(ctx, inpName.value.trim(),      C.name,      fontFamily, colorHex);
   drawAutoCenteredText(ctx, inpPlayerId.value.trim(),  C.playerId,  fontFamily, colorHex);
   drawAutoCenteredText(ctx, inpGuild.value.trim(),     C.guild,     fontFamily, colorHex);
@@ -308,6 +291,9 @@ function drawImageCover(ctx, img, x, y, w, h){
 // ======================
 // チェックマーク描画
 // ======================
+let checkImg = null;
+loadImage("check.png").then(img => checkImg = img);
+
 function drawCheckAt(ctx, rect){
   const size = Math.min(rect.w, rect.h) - 4;
   const cx = rect.x + rect.w / 2;
@@ -325,7 +311,7 @@ function drawCheckAt(ctx, rect){
 
 
 // ======================
-// Auto Center Text
+// 中央テキスト
 // ======================
 function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex){
   if (!text) return;
@@ -358,7 +344,7 @@ function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex){
 
 
 // ======================
-// Auto Wrapped Text
+// 改行テキスト
 // ======================
 function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex){
   if (!text) return;
