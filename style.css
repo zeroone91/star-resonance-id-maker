@@ -286,3 +286,12 @@ textarea {
     max-width: 540px;
   }
 }
+
+#randomBanner {
+  width: 100%;       /* プレビューと同じ幅に合わせる */
+  max-width: 100%;   /* 親の幅からはみ出さない */
+  height: auto;      /* アスペクト比維持 */
+  margin-top: 20px;
+  border-radius: 12px;
+  display: block;
+}
