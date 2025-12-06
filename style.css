@@ -317,10 +317,15 @@ textarea {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.7);
-  display: flex;
+  display: none;           /* ← デフォルトは非表示 */
   justify-content: center;
   align-items: center;
   z-index: 999;
+}
+
+/* JS から is-open を付けたときだけ表示 */
+.crop-modal.is-open {
+  display: flex;
 }
 
 .crop-modal-inner {
