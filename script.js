@@ -443,7 +443,7 @@ btnDownload.addEventListener("click", async () => {
 
   // PNG 保存
   const a = document.createElement("a");
-  a.download = "STAR_RESONANCE_ID.png";
+  a.download = "スタレゾ自己紹介カード.png";
   a.href = canvas.toDataURL("image/png");
   a.click();
 
