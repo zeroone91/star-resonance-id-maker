@@ -473,19 +473,9 @@ async function drawSimple() {
   const C = CONFIG_SIMPLE;
 
   const baseImg = await loadImage(C.basePath);
-  if (baseImg) {
-    ctx.drawImage(baseImg, 0, 0, C.canvasW, C.canvasH);
-
-  // conditional guild / playstyle backgrounds
-  if (guild !== "") {
-    const bpGuildBgImg = await loadImage("bp_guild.png");
-    if (bpGuildBgImg) ctx.drawImage(bpGuildBgImg, 475, 646, 684, 180);
-  }
-  if (playStyle !== "") {
-    const bpPlayStyleBgImg = await loadImage("bp_playstyle.png");
-    if (bpPlayStyleBgImg) ctx.drawImage(bpPlayStyleBgImg, 1174, 646, 683, 180);
-  }
-  }
+if (baseImg) {
+  ctx.drawImage(baseImg, 0, 0, C.canvasW, C.canvasH);
+}
 
   if (freePhotoImg_simple) {
     drawImageCover(freePhotoImg_simple, C.freePhoto);
