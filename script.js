@@ -475,6 +475,11 @@ async function drawSimple() {
   const baseImg = await loadImage(C.basePath);
   if (baseImg) {
     ctx.drawImage(baseImg, 0, 0, C.canvasW, C.canvasH);
+
+  const bpGuildBgImg     = await loadImage("bp_guild.png");
+  const bpPlayStyleBgImg = await loadImage("bp_playstyle.png");
+  if (bpGuildBgImg) ctx.drawImage(bpGuildBgImg, 475, 646, 684, 180);
+  if (bpPlayStyleBgImg) ctx.drawImage(bpPlayStyleBgImg, 1174, 646, 683, 180);
   }
 
   if (freePhotoImg_simple) {
@@ -643,7 +648,15 @@ async function drawBlueprotocol() {
   drawShrinkText(score,     C.score,      font, "#000000", "right");
   drawShrinkText(guild,     C.guild,      font, "#000000", "left");
   drawShrinkText(playStyle, C.playStyle,  font, "#000000", "left");
-  drawShrinkBlockLeft(comment, C.freeComment, font, "#000000");
+  drawShrinkBlockLeft(
+    comment,
+    {
+      x: C.freeComment.x + 20,
+      y: C.freeComment.y,
+      w: C.freeComment.w - 40,
+      h: C.freeComment.h
+    },
+ font, "#000000");
 }
 
 // ブルプロ用フォント取得
