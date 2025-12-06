@@ -1,5 +1,6 @@
 /* style.css - STAR RESONANCE ID MAKER */
 
+/* 全体カラー */
 :root {
   --bg: #0b0b0b;
   --panel: #111;
@@ -7,7 +8,9 @@
   --accent: #ff8c00;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -20,6 +23,7 @@ a {
   color: #0af;
 }
 
+/* ヘッダー */
 header {
   text-align: center;
   padding: 14px 8px 4px;
@@ -30,6 +34,7 @@ h1 {
   font-size: 20px;
 }
 
+/* 使い方 */
 .howto {
   max-width: 800px;
   margin: 0 auto 10px;
@@ -40,6 +45,7 @@ h1 {
   line-height: 1.5;
 }
 
+/* メインレイアウト */
 .layout {
   max-width: 1180px;
   margin: 0 auto 20px;
@@ -101,7 +107,7 @@ textarea {
   resize: vertical;
 }
 
-/* グループ */
+/* グループタイトル */
 .group {
   margin-top: 8px;
 }
@@ -111,7 +117,7 @@ textarea {
   margin-bottom: 4px;
 }
 
-/* チェックボックス */
+/* チェックボックス配置 */
 .check-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -146,7 +152,7 @@ textarea {
 .font-c { font-family: "DotGothic16", sans-serif; }
 .font-d { font-family: "M PLUS Rounded 1c", sans-serif; }
 
-/* 文字色 */
+/* 文字色選択 */
 .color-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -197,6 +203,19 @@ textarea {
   font-size: 12px;
 }
 
+/* ブルプロ風：フリーフォト行 */
+.bp-photo-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.bp-photo-row input[type="file"] {
+  flex: 1;
+}
+
 /* ボタン */
 .button-area {
   margin-top: 10px;
@@ -227,7 +246,7 @@ textarea {
   color: #000;
 }
 
-/* 右カラム */
+/* 右カラム：プレビュー */
 .preview-column {
   flex: 1 1 480px;
   max-width: 520px;
@@ -257,41 +276,84 @@ textarea {
   margin-top: 6px;
 }
 
-/* 汎用 */
-.hide {
-  display: none;
-}
-
-/* PC向け拡張 */
-@media (min-width: 1100px) {
-  .form-column {
-    width: 360px;
-    
-/* バナーエリア */
-    #discordBannerArea {
+/* Discord バナー */
+#discordBannerArea {
   width: 100%;
   text-align: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 16px;
+  margin-bottom: 10px;
 }
 
 #discordBannerArea img {
-  width: 80%;
-  max-width: 600px;
-  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
 }
 
+/* プレビュー幅に合わせる */
+#randomBanner {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* PC向け幅調整 */
+@media (min-width: 1100px) {
+  .form-column {
+    width: 360px;
   }
   .preview-column {
     max-width: 540px;
   }
 }
 
-#randomBanner {
-  width: 100%;       /* プレビューと同じ幅に合わせる */
-  max-width: 100%;   /* 親の幅からはみ出さない */
-  height: auto;      /* アスペクト比維持 */
-  margin-top: 20px;
-  border-radius: 12px;
+/* 汎用 */
+.hide {
+  display: none;
+}
+
+/* Cropper.js モーダル */
+.crop-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.crop-modal-inner {
+  background: #111;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  max-width: 90vw;
+  max-height: 90vh;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.crop-title {
+  margin: 0;
+  font-size: 14px;
+}
+
+.crop-image-wrap {
+  flex: 1;
+  min-width: 260px;
+  min-height: 200px;
+  overflow: hidden;
+}
+
+.crop-image-wrap img {
+  max-width: 100%;
   display: block;
+}
+
+.crop-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
 }
