@@ -495,5 +495,22 @@ function wrapText(text, maxW) {
   return lines;
 }
 
+// ==============================
+// Discordバナー ランダム表示
+// ==============================
+
+function showRandomBanner() {
+  const banners = ["banner1.png", "banner2.png"];
+
+  // ランダム選択
+  const choice = banners[Math.floor(Math.random() * banners.length)];
+
+  // 表示
+  const img = document.getElementById("discordBannerImg");
+  img.src = choice;
+}
+
+showRandomBanner(); // 読み込み時に実行
+
 // 初期表示
 drawPreview();
