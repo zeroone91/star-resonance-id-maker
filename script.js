@@ -423,30 +423,34 @@ btnRender.addEventListener("click", () => {
   drawPreview();
 });
 
- // デザインごとに出力サイズを切り替える
+btnDownload.addEventListener("click", async () => {
+  const design = designSelect.value;
+
+  // 保存用にキャンバスサイズ切替
   if (design === "classic") {
     canvas.width  = 1600;
     canvas.height = 1200;
-    await drawClassic();
+    await drawClassic(); // ← クラシックを1600×1200で再描画
   } else if (design === "blueprotocol") {
-    canvas.width  = 1904;
-    canvas.height = 1244;
+    canvas.width  = BP_W;
+    canvas.height = BP_H;
     await drawBlueprotocol();
   } else {
-    canvas.width  = 1244;
-    canvas.height = 1904;
+    canvas.width  = CANVAS_W;
+    canvas.height = CANVAS_H;
     await drawSimple();
   }
 
-  // 保存
+  // PNG 保存
   const a = document.createElement("a");
-  a.download = "スタレゾ自己紹介カード.png";
+  a.download = "STAR_RESONANCE_ID.png";
   a.href = canvas.toDataURL("image/png");
   a.click();
 
-  // DL後はプレビュー用サイズに戻す
+  // 保存後はプレビュー用サイズへ戻す
   drawPreview();
 });
+
 
 btnShareX.addEventListener("click", () => {
   const tweet =
