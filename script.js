@@ -584,7 +584,7 @@ async function drawClassic() {
 }
 
 // ----------------------------------------
-// ブルプロ風 描画
+// ブルプロ風 描画（完全修正版）
 // ----------------------------------------
 async function drawBlueprotocol() {
   const C = CONFIG_BP;
@@ -599,10 +599,21 @@ async function drawBlueprotocol() {
     ctx.drawImage(bpIconCroppedImg, C.iconBox.x, C.iconBox.y, C.iconBox.w, C.iconBox.h);
   }
 
-  // 3. base_bp.png（半透過前提）
+  // 3. base_bp.png（UIパーツ一式）
   const baseImg = await loadImage(C.basePath);
   if (baseImg) {
     ctx.drawImage(baseImg, 0, 0, C.canvasW, C.canvasH);
+  }
+
+  // 3.5 ギルド背景 / プレイスタイル背景を必ずここで描画
+  const bpGuildBgImg     = await loadImage("bp_guild.png");
+  const bpPlayStyleBgImg = await loadImage("bp_playstyle.png");
+
+  if (bpGuildBgImg) {
+    ctx.drawImage(bpGuildBgImg, 475, 646, 684, 180);
+  }
+  if (bpPlayStyleBgImg) {
+    ctx.drawImage(bpPlayStyleBgImg, 1174, 646, 683, 180);
   }
 
   // 4. クラスアイコン
@@ -625,13 +636,13 @@ async function drawBlueprotocol() {
   // 6. テキスト類
   const font = getBpFont();
 
-  const name  = inpName_bp.value.trim();
-  const id    = inpPlayerId_bp.value.trim();
-  const guild = inpGuild_bp.value.trim();
-  const like  = (inpLike_bp.value.trim() || "0");
-  const rank  = (inpRank_bp.value.trim() || "1");
-  const score = (inpScore_bp.value.trim() || "0");
-  const level = (inpLevel_bp.value.trim() || "1");
+  const name      = inpName_bp.value.trim();
+  const id        = inpPlayerId_bp.value.trim();
+  const guild     = inpGuild_bp.value.trim();
+  const like      = (inpLike_bp.value.trim() || "0");
+  const rank      = (inpRank_bp.value.trim() || "1");
+  const score     = (inpScore_bp.value.trim() || "0");
+  const level     = (inpLevel_bp.value.trim() || "1");
   const playStyle = inpPlayStyle_bp.value.trim();
   const playTime  = inpPlayTime_bp.value.trim();
   const comment   = inpComment_bp.value.trim();
@@ -648,6 +659,8 @@ async function drawBlueprotocol() {
   drawShrinkText(score,     C.score,      font, "#000000", "right");
   drawShrinkText(guild,     C.guild,      font, "#000000", "left");
   drawShrinkText(playStyle, C.playStyle,  font, "#000000", "left");
+
+  // ★ freeComment は幅調整（20px 内側）した座標で描画
   drawShrinkBlockLeft(
     comment,
     {
@@ -656,14 +669,11 @@ async function drawBlueprotocol() {
       w: C.freeComment.w - 40,
       h: C.freeComment.h
     },
- font, "#000000");
+    font,
+    "#000000"
+  );
 }
 
-// ブルプロ用フォント取得
-function getBpFont() {
-  const fontKey = document.querySelector('input[name="font_bp"]:checked')?.value || "A";
-  return FONT_MAP[fontKey] || FONT_MAP["A"];
-}
 
 // ----------------------------------------
 // 描画ヘルパー
