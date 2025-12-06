@@ -1,20 +1,13 @@
-// script.js
-// simple / classic 両対応版（simple の元仕様を維持したまま classic を追加）
+// script.js - STAR RESONANCE ID MAKER (simple / classic)
 
-// ===============================
-//  共通
-// ===============================
 const CANVAS_W = 1244;
 const CANVAS_H = 1904;
 
-// -------------------------------
-// simple（従来）カード用 CONFIG
-// -------------------------------
+// ---------- simple CONFIG (card_base_simple 1244x1904) ----------
 const CONFIG_SIMPLE = {
   canvasW: CANVAS_W,
   canvasH: CANVAS_H,
 
-  // テキスト枠
   name:       { x:417, y:280,  w:732, h:94  },
   playerId:   { x:420, y:460,  w:729, h:87  },
   guild:      { x:66,  y:932,  w:618, h:74  },
@@ -22,11 +15,9 @@ const CONFIG_SIMPLE = {
   playTime:   { x:724, y:1095, w:456, h:67  },
   freeComment:{ x:70,  y:1242, w:1106,h:120 },
 
-  // 画像枠
   userIcon:   { x:60,  y:213,  w:324, h:324 },
   freePhoto:  { x:387, y:1397, w:776, h:434 },
 
-  // チェック枠
   classChecks: [
     { x:100,  y:782, w:47, h:47 },
     { x:241,  y:782, w:47, h:47 },
@@ -48,63 +39,48 @@ const CONFIG_SIMPLE = {
   checkPath: "check.png"
 };
 
-// -------------------------------
-// classic カード用 CONFIG
-//   基準画像：1600x1200（sample_classic / base_classic）
-// -------------------------------
-const scaleX = CANVAS_W / 1600;        // 1244 / 1600
-const CX = v => Math.round(v * scaleX);
-const CY = v => Math.round(v * scaleX);
+// ---------- classic CONFIG (base_classic 1600x1200 → 等比縮小で横フィット) ----------
+const scaleX = CANVAS_W / 1600;
+const CX = px => Math.round(px * scaleX);
+const CY = px => Math.round(px * scaleX);
 
 const CONFIG_CLASSIC = {
   canvasW: CANVAS_W,
   canvasH: CANVAS_H,
-
   basePath: "base_classic.png",
 
-  // テキスト枠
-  name:       { x: CX(760),  y: CY(189), w: CX(766), h: CY(112) },
-  playerId:   { x: CX(760),  y: CY(333), w: CX(766), h: CY(112) },
-  guild:      { x: CX(760),  y: CY(475), w: CX(766), h: CY(112) },
+  name:       { x:CX(760),  y:CY(189), w:CX(766), h:CY(112) },
+  playerId:   { x:CX(760),  y:CY(333), w:CX(766), h:CY(112) },
+  guild:      { x:CX(760),  y:CY(475), w:CX(766), h:CY(112) },
 
-  // Class 全体枠（ここに最大3つ横並び）
-  classFrame: { x: CX(13),   y: CY(624), w: CX(396), h: CY(127) },
+  classFrame: { x:CX(13),   y:CY(624), w:CX(397), h:CY(127) },
 
-  // Voice Chat（最大2つ）
   vcFrames: [
-    { x: CX(441), y: CY(758), w: CX(118), h: CY(117) },
-    { x: CX(611), y: CY(758), w: CX(117), h: CY(117) }
+    { x:CX(441),  y:CY(758), w:CX(118), h:CY(118) },
+    { x:CX(611),  y:CY(758), w:CX(118), h:CY(118) }
   ],
 
-  // Play Time（最大3つ）
   ptFrames: [
-    { x: CX(1160), y: CY(758), w: CX(117), h: CY(117) },
-    { x: CX(1299), y: CY(758), w: CX(118), h: CY(117) },
-    { x: CX(1440), y: CY(758), w: CX(118), h: CY(117) }
+    { x:CX(1160), y:CY(758), w:CX(118), h:CY(118) },
+    { x:CX(1299), y:CY(758), w:CX(118), h:CY(118) },
+    { x:CX(1440), y:CY(758), w:CX(118), h:CY(118) }
   ],
 
-  // Play Style（5 段階）※sample_classic から再解析
-  //  1〜5 の中心：
-  //   (850,696) (1008,696) (1166,696) (1325,696) (1483,696)
-  //  そこから 60x60 の枠を切って配置
+  // PlayStyle 5段階（sample_classic の赤枠から取得）
   psFrames: [
-    { x: CX(820),    y: CY(666), w: CX(60), h: CY(60) },      // 1
-    { x: CX(978.25), y: CY(666), w: CX(60), h: CY(60) },      // 2
-    { x: CX(1136.5), y: CY(666), w: CX(60), h: CY(60) },      // 3
-    { x: CX(1294.75),y: CY(666), w: CX(60), h: CY(60) },      // 4
-    { x: CX(1453),   y: CY(666), w: CX(60), h: CY(60) }       // 5
+    { x:CX(817),  y:CY(663), w:CX(66), h:CY(66) }, // 1
+    { x:CX(962),  y:CY(663), w:CX(66), h:CY(66) }, // 2
+    { x:CX(1125), y:CY(663), w:CX(66), h:CY(66) }, // 3
+    { x:CX(1288), y:CY(663), w:CX(66), h:CY(66) }, // 4
+    { x:CX(1450), y:CY(663), w:CX(66), h:CY(66) }  // 5
   ],
 
-  // Free Comment
-  freeComment:{ x: CX(32),   y: CY(985), w: CX(1528), h: CY(167) },
+  freeComment:{ x:CX(32),  y:CY(985), w:CX(1528), h:CY(167) },
 
-  // アイコン
-  userIcon:   { x: CX(13),   y: CY(209), w: CX(396), h: CY(396) }
+  userIcon:   { x:CX(13),  y:CY(208), w:CX(397), h:CY(397) }
 };
 
-// ===============================
-// アイコン画像マップ
-// ===============================
+// ---------- アイコンパス ----------
 const CLASS_ICON_MAP = {
   "ストームブレイド":     "icons2/class_storm.png",
   "ヘヴィガーディアン":   "icons2/class_heavy.png",
@@ -132,58 +108,53 @@ const PT_ICON_MAP = {
 
 const PS_ICON_PATH = "icons2/ps.png";
 
-// ===============================
-// フォント設定
-// ===============================
+// ---------- フォント設定 ----------
 const FONT_MAP = {
-  "A": "'Noto Sans JP', sans-serif",
-  "B": "'Yusei Magic', sans-serif",
-  "C": "'DotGothic16', sans-serif",
-  "D": "'M PLUS Rounded 1c', sans-serif"
+  "A": "'Noto Sans JP', sans-serif",          // かっこいい系
+  "B": "'Yusei Magic', cursive",             // かわいい系
+  "C": "'DotGothic16', sans-serif",          // ゲーム系
+  "D": "'M PLUS Rounded 1c', sans-serif"     // おしゃれ系
 };
 
-// ===============================
+// =====================================================
 // DOM 取得
-// ===============================
+// =====================================================
 const canvas = document.getElementById("cardCanvas");
-const ctx    = canvas.getContext("2d");
+const ctx     = canvas.getContext("2d");
 
 const designSelect = document.getElementById("designSelect");
+const formSimple   = document.getElementById("formSimple");
+const formClassic  = document.getElementById("formClassic");
 
-// simple フォーム
-const inpName      = document.getElementById("inpName");
-const inpPlayerId  = document.getElementById("inpPlayerId");
-const inpGuild     = document.getElementById("inpGuild");
-const inpPlayStyle = document.getElementById("inpPlayStyle");
-const inpPlayTime  = document.getElementById("inpPlayTime");
-const inpComment   = document.getElementById("inpComment");
-const fileIcon     = document.getElementById("fileIcon");
-const fileFree     = document.getElementById("fileFree");
+// simple inputs
+const inpName_s      = document.getElementById("inpName_s");
+const inpPlayerId_s  = document.getElementById("inpPlayerId_s");
+const inpGuild_s     = document.getElementById("inpGuild_s");
+const inpPlayStyle_s = document.getElementById("inpPlayStyle_s");
+const inpPlayTime_s  = document.getElementById("inpPlayTime_s");
+const inpComment_s   = document.getElementById("inpComment_s");
+const fileIcon_s     = document.getElementById("fileIcon_s");
+const fileFree_s     = document.getElementById("fileFree_s");
 
-// classic フォーム
-const inpName_c     = document.getElementById("inpName_c");
-const inpPlayerId_c = document.getElementById("inpPlayerId_c");
-const inpGuild_c    = document.getElementById("inpGuild_c");
-const inpComment_c  = document.getElementById("inpComment_c");
-const fileIcon_c    = document.getElementById("fileIcon_c");
+// classic inputs
+const inpName_c      = document.getElementById("inpName_c");
+const inpPlayerId_c  = document.getElementById("inpPlayerId_c");
+const inpGuild_c     = document.getElementById("inpGuild_c");
+const inpComment_c   = document.getElementById("inpComment_c");
+const fileIcon_c     = document.getElementById("fileIcon_c");
 
-// ラッパー（あれば切替に使う）
-const formSimple  = document.getElementById("formSimple");
-const formClassic = document.getElementById("formClassic");
-
-// ボタン
+// buttons
 const btnRender   = document.getElementById("btnRender");
 const btnDownload = document.getElementById("btnDownload");
 const btnShareX   = document.getElementById("btnShareX");
 
-// ===============================
-// 画像キャッシュ
-// ===============================
+// =====================================================
+// 画像キャッシュ / ローダ
+// =====================================================
 const imageCache = {};
 function loadImage(src) {
   if (!src) return Promise.resolve(null);
   if (imageCache[src]) return imageCache[src];
-
   imageCache[src] = new Promise(resolve => {
     const img = new Image();
     img.onload = () => resolve(img);
@@ -193,80 +164,78 @@ function loadImage(src) {
   return imageCache[src];
 }
 
-// ユーザー画像
-let userIconImg_simple  = null;
+// ユーザーアップロード画像
+let userIconImg_simple = null;
 let freePhotoImg_simple = null;
 let userIconImg_classic = null;
 
-// ===============================
-// ファイル入力
-// ===============================
-fileIcon && fileIcon.addEventListener("change", e => {
-  readImageFile(e.target.files[0], img => {
-    userIconImg_simple = img;
-    drawPreview();
-  });
-});
-
-fileFree && fileFree.addEventListener("change", e => {
-  readImageFile(e.target.files[0], img => {
-    freePhotoImg_simple = img;
-    drawPreview();
-  });
-});
-
-fileIcon_c && fileIcon_c.addEventListener("change", e => {
-  readImageFile(e.target.files[0], img => {
-    userIconImg_classic = img;
-    drawPreview();
-  });
-});
-
-// ===============================
-// デザイン切替
-// ===============================
-function getCurrentDesign() {
-  return designSelect ? designSelect.value : "simple";
+function readImageFile(file, cb) {
+  if (!file) { cb(null); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => cb(img);
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
-designSelect && designSelect.addEventListener("change", () => {
-  const d = getCurrentDesign();
+fileIcon_s?.addEventListener("change", e => {
+  readImageFile(e.target.files[0], img => { userIconImg_simple = img; drawPreview(); });
+});
+fileFree_s?.addEventListener("change", e => {
+  readImageFile(e.target.files[0], img => { freePhotoImg_simple = img; drawPreview(); });
+});
+fileIcon_c?.addEventListener("change", e => {
+  readImageFile(e.target.files[0], img => { userIconImg_classic = img; drawPreview(); });
+});
 
-  if (formSimple && formClassic) {
-    formSimple.style.display  = (d === "simple")  ? "" : "none";
-    formClassic.style.display = (d === "classic") ? "" : "none";
+// =====================================================
+// デザイン切替
+// =====================================================
+designSelect.addEventListener("change", () => {
+  const d = designSelect.value;
+  if (d === "classic") {
+    formSimple.classList.add("hide");
+    formClassic.classList.remove("hide");
+  } else {
+    formSimple.classList.remove("hide");
+    formClassic.classList.add("hide");
   }
   drawPreview();
 });
 
-// ===============================
-// ボタンイベント
-// ===============================
-btnRender && btnRender.addEventListener("click", () => {
+// =====================================================
+// ボタン
+// =====================================================
+btnRender.addEventListener("click", () => {
   drawPreview();
 });
 
-btnDownload && btnDownload.addEventListener("click", () => {
-  downloadPNG();
+btnDownload.addEventListener("click", async () => {
+  await drawPreview();
+  const a = document.createElement("a");
+  a.download = "STAR_RESONANCE_ID.png";
+  a.href = canvas.toDataURL("image/png");
+  a.click();
 });
 
-btnShareX && btnShareX.addEventListener("click", () => {
+btnShareX.addEventListener("click", () => {
   const tweet =
     "(下記ハッシュタグは消さずに保存した画像を添付して使用してね)\n" +
     "　\n" +
     "#スタレゾ #スタレゾ自己紹介カード\n" +
     "作成はコチラから👇\n" +
     "https://zeroone91.github.io/star-resonance-id-maker/";
-
   const url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet);
   window.open(url, "_blank");
 });
 
-// ===============================
+// =====================================================
 // メイン描画
-// ===============================
+// =====================================================
 async function drawPreview() {
-  const design = getCurrentDesign();
+  const design = designSelect.value;
 
   canvas.width  = CANVAS_W;
   canvas.height = CANVAS_H;
@@ -279,126 +248,91 @@ async function drawPreview() {
   }
 }
 
-// -------------------------------
-// simple 描画
-// -------------------------------
+// ---------- simple 描画 ----------
 async function drawSimple() {
   const C = CONFIG_SIMPLE;
 
-  // 背景
   const baseImg = await loadImage(C.basePath);
   if (baseImg) {
     ctx.drawImage(baseImg, 0, 0, C.canvasW, C.canvasH);
   }
 
-  // フリーフォト
   if (freePhotoImg_simple) {
-    drawImageCover(ctx, freePhotoImg_simple, C.freePhoto.x, C.freePhoto.y, C.freePhoto.w, C.freePhoto.h);
+    drawImageCover(freePhotoImg_simple, C.freePhoto);
   }
-
-  // アイコン
   if (userIconImg_simple) {
-    drawImageCover(ctx, userIconImg_simple, C.userIcon.x, C.userIcon.y, C.userIcon.w, C.userIcon.h);
+    drawImageCover(userIconImg_simple, C.userIcon);
   }
 
-  // チェックマーク
   const checkImg = await loadImage(C.checkPath);
 
-  const classCheckboxes = Array.from(
-    document.querySelectorAll('#classList input[type="checkbox"]')
-  );
+  const classCheckboxes = Array.from(document.querySelectorAll('#classList_s input[type="checkbox"]'));
   classCheckboxes.forEach((cb, idx) => {
-    if (cb.checked && C.classChecks[idx]) {
-      drawCheckAt(ctx, C.classChecks[idx], checkImg);
-    }
+    if (cb.checked && C.classChecks[idx]) drawCheckAt(C.classChecks[idx], checkImg);
   });
 
-  const vcCheckboxes = Array.from(
-    document.querySelectorAll('#vcList input[type="checkbox"]')
-  );
+  const vcCheckboxes = Array.from(document.querySelectorAll('#vcList_s input[type="checkbox"]'));
   vcCheckboxes.forEach((cb, idx) => {
-    if (cb.checked && C.vcChecks[idx]) {
-      drawCheckAt(ctx, C.vcChecks[idx], checkImg);
-    }
+    if (cb.checked && C.vcChecks[idx]) drawCheckAt(C.vcChecks[idx], checkImg);
   });
 
-  const { fontFamily, colorHex } = getFontAndColor("simple");
+  const fontKey  = document.querySelector('input[name="font_s"]:checked')?.value || "A";
+  const font     = FONT_MAP[fontKey] || FONT_MAP["A"];
+  const colorKey = document.querySelector('input[name="color_s"]:checked')?.value || "black";
+  const color    = resolveColor(colorKey);
 
-  // テキスト
-  drawAutoCenteredText(ctx, (inpName?.value || "").trim(),      C.name,      fontFamily, colorHex);
-  drawAutoCenteredText(ctx, (inpPlayerId?.value || "").trim(),  C.playerId,  fontFamily, colorHex);
-  drawAutoCenteredText(ctx, (inpGuild?.value || "").trim(),     C.guild,     fontFamily, colorHex);
-  drawAutoCenteredText(ctx, (inpPlayStyle?.value || "").trim(), C.playStyle, fontFamily, colorHex);
-  drawAutoCenteredText(ctx, (inpPlayTime?.value || "").trim(),  C.playTime,  fontFamily, colorHex);
-
-  drawAutoWrappedLeftText(
-    ctx,
-    (inpComment?.value || "").trim(),
-    C.freeComment,
-    fontFamily,
-    colorHex
-  );
+  drawAutoCenteredText(inpName_s.value.trim(),      C.name,      font, color);
+  drawAutoCenteredText(inpPlayerId_s.value.trim(),  C.playerId,  font, color);
+  drawAutoCenteredText(inpGuild_s.value.trim(),     C.guild,     font, color);
+  drawAutoCenteredText(inpPlayStyle_s.value.trim(), C.playStyle, font, color);
+  drawAutoCenteredText(inpPlayTime_s.value.trim(),  C.playTime,  font, color);
+  drawAutoWrappedLeftText(inpComment_s.value.trim(), C.freeComment, font, color);
 }
 
-// -------------------------------
-// classic 描画
-// -------------------------------
+// ---------- classic 描画 ----------
 async function drawClassic() {
   const C = CONFIG_CLASSIC;
 
-  // ★ classic 背景は 4:3（1600×1200）のまま縮小表示する
-const baseImg = await loadImage(C.basePath);
-if (baseImg) {
-    // 4:3 の比率に合わせて計算
-    const targetW = CANVAS_W;                  // 1244px に合わせて縮小
-    const targetH = Math.round(targetW * 0.75); // 4:3 の縦 = 横×0.75 → 933px
-
-    ctx.drawImage(baseImg, 0, 0, targetW, targetH);
-}
-
-  // キャラアイコン
-  if (userIconImg_classic) {
-    drawImageCover(ctx, userIconImg_classic, C.userIcon.x, C.userIcon.y, C.userIcon.w, C.userIcon.h);
+  const baseImg = await loadImage(C.basePath);
+  if (baseImg) {
+    const drawW = CANVAS_W;
+    const drawH = Math.round(1200 * scaleX); // 1600x1200 → 横フィット・縦は黒余白
+    ctx.drawImage(baseImg, 0, 0, drawW, drawH);
   }
 
-  // Class アイコン（最大3つ）
-  const classChecks = Array.from(
-    document.querySelectorAll('#classList_c input[type="checkbox"]')
-  )
+  if (userIconImg_classic) {
+    drawImageCover(userIconImg_classic, C.userIcon);
+  }
+
+  // Class 最大3つ
+  const classIcons = Array.from(document.querySelectorAll('#classList_c input[type="checkbox"]'))
     .filter(cb => cb.checked)
     .map(cb => CLASS_ICON_MAP[cb.value])
     .filter(Boolean)
     .slice(0, 3);
+  await drawIconArray(classIcons, C.classFrame);
 
-  await drawIconArray(classChecks, C.classFrame);
-
-  // VC アイコン（最大2つ）
-  const vcChecks = Array.from(
-    document.querySelectorAll('#vcList_c input[type="checkbox"]')
-  )
+  // VC 最大2つ
+  const vcIcons = Array.from(document.querySelectorAll('#vcList_c input[type="checkbox"]'))
     .filter(cb => cb.checked)
     .map(cb => VC_ICON_MAP[cb.value])
     .filter(Boolean)
     .slice(0, 2);
-
-  for (let i = 0; i < vcChecks.length; i++) {
-    await drawIcon(vcChecks[i], C.vcFrames[i]);
+  for (let i = 0; i < vcIcons.length; i++) {
+    await drawIcon(vcIcons[i], C.vcFrames[i]);
   }
 
-  // Play Time（最大3つ）
-  const ptChecks = Array.from(
-    document.querySelectorAll('#ptList_c input[type="checkbox"]')
-  )
+  // PlayTime 最大3つ
+  const ptIcons = Array.from(document.querySelectorAll('#ptList_c input[type="checkbox"]'))
     .filter(cb => cb.checked)
     .map(cb => PT_ICON_MAP[cb.value])
     .filter(Boolean)
     .slice(0, 3);
-
-  for (let i = 0; i < ptChecks.length; i++) {
-    await drawIcon(ptChecks[i], C.ptFrames[i]);
+  for (let i = 0; i < ptIcons.length; i++) {
+    await drawIcon(ptIcons[i], C.ptFrames[i]);
   }
 
-  // Play Style（1〜5 のどこか1つ）
+  // PlayStyle 5段階
   const psChecked = document.querySelector('input[name="ps_c"]:checked');
   if (psChecked) {
     const idx = Number(psChecked.value) - 1;
@@ -407,125 +341,87 @@ if (baseImg) {
     }
   }
 
-  const { fontFamily, colorHex } = getFontAndColor("classic");
+  const fontKey  = document.querySelector('input[name="font_c"]:checked')?.value || "A";
+  const font     = FONT_MAP[fontKey] || FONT_MAP["A"];
+  const colorKey = document.querySelector('input[name="color_c"]:checked')?.value || "white";
+  const color    = resolveColor(colorKey);
 
-  // テキスト（フォント・色は simple と同じ仕組み）
-  drawAutoCenteredText(ctx, (inpName_c?.value || "").trim(),     C.name,     fontFamily, colorHex);
-  drawAutoCenteredText(ctx, (inpPlayerId_c?.value || "").trim(), C.playerId, fontFamily, colorHex);
-  drawAutoCenteredText(ctx, (inpGuild_c?.value || "").trim(),    C.guild,    fontFamily, colorHex);
-
-  drawAutoWrappedLeftText(
-    ctx,
-    (inpComment_c?.value || "").trim(),
-    C.freeComment,
-    fontFamily,
-    colorHex
-  );
+  drawAutoCenteredText(inpName_c.value.trim(),     C.name,     font, color);
+  drawAutoCenteredText(inpPlayerId_c.value.trim(), C.playerId, font, color);
+  drawAutoCenteredText(inpGuild_c.value.trim(),    C.guild,    font, color);
+  drawAutoWrappedLeftText(inpComment_c.value.trim(), C.freeComment, font, color);
 }
 
-// ===============================
-// フォント＆カラー取得
-// ===============================
-function getFontAndColor(mode) {
-  let fontInput = null;
-  let colorInput = null;
-
-  if (mode === "classic") {
-    fontInput  = document.querySelector('input[name="font_c"]:checked');
-    colorInput = document.querySelector('input[name="color_c"]:checked');
+// =====================================================
+// 描画ヘルパー
+// =====================================================
+function resolveColor(key) {
+  switch (key) {
+    case "blue":  return "#3b82f6";
+    case "red":   return "#ef4444";
+    case "pink":  return "#ec4899";
+    case "green": return "#22c55e";
+    case "white": return "#ffffff";
+    case "black":
+    default:      return "#000000";
   }
-  // classic で未選択、または simple の場合
-  if (!fontInput) {
-    fontInput = document.querySelector('input[name="font"]:checked');
-  }
-  if (!colorInput) {
-    colorInput = document.querySelector('input[name="color"]:checked');
-  }
-
-  const fontKey   = fontInput ? fontInput.value : "A";
-  const fontFamily = FONT_MAP[fontKey] || FONT_MAP["A"];
-  const colorHex   = colorInput ? colorInput.value : "#ffffff";
-
-  return { fontFamily, colorHex };
 }
 
-// ===============================
-// ヘルパー
-// ===============================
-function readImageFile(file, cb) {
-  if (!file) { cb(null); return; }
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = new Image();
-    img.onload = () => cb(img);
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function drawImageCover(ctx, img, x, y, w, h) {
+function drawImageCover(img, box) {
   const iw = img.width;
   const ih = img.height;
-  const boxRatio = w / h;
+  const boxRatio = box.w / box.h;
   const imgRatio = iw / ih;
 
   let sx, sy, sw, sh;
-
   if (imgRatio > boxRatio) {
-    // 横長 → 横をトリミング
     sh = ih;
     sw = sh * boxRatio;
     sx = (iw - sw) / 2;
     sy = 0;
   } else {
-    // 縦長 → 縦をトリミング
     sw = iw;
     sh = sw / boxRatio;
     sx = 0;
     sy = (ih - sh) / 2;
   }
 
-  ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+  ctx.drawImage(img, sx, sy, sw, sh, box.x, box.y, box.w, box.h);
 }
 
-async function drawIcon(path, frame) {
+async function drawIcon(path, box) {
   const img = await loadImage(path);
   if (!img) return;
-
-  const size = Math.min(frame.w, frame.h);
-  const dx = frame.x + (frame.w - size) / 2;
-  const dy = frame.y + (frame.h - size) / 2;
-
-  ctx.drawImage(img, dx, dy, size, size);
+  const size = Math.min(box.w, box.h);
+  const x = box.x + (box.w - size) / 2;
+  const y = box.y + (box.h - size) / 2;
+  ctx.drawImage(img, x, y, size, size);
 }
 
 async function drawIconArray(paths, frame) {
   const n = paths.length;
-  if (n === 0) return;
+  if (!n) return;
 
   const perW = frame.w / n;
   for (let i = 0; i < n; i++) {
     const img = await loadImage(paths[i]);
     if (!img) continue;
-
     const size = Math.min(perW * 0.8, frame.h * 0.8);
-    const dx = frame.x + perW * i + (perW - size) / 2;
-    const dy = frame.y + (frame.h - size) / 2;
-
-    ctx.drawImage(img, dx, dy, size, size);
+    const x = frame.x + perW * i + (perW - size) / 2;
+    const y = frame.y + (frame.h - size) / 2;
+    ctx.drawImage(img, x, y, size, size);
   }
 }
 
-function drawCheckAt(ctx, rect, checkImg) {
+function drawCheckAt(rect, checkImg) {
   if (!checkImg) return;
   const size = Math.min(rect.w, rect.h) - 4;
   const cx = rect.x + rect.w / 2;
   const cy = rect.y + rect.h / 2;
-
   ctx.drawImage(checkImg, cx - size / 2, cy - size / 2, size, size);
 }
 
-function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex) {
+function drawAutoCenteredText(text, box, fontFamily, colorHex) {
   if (!text) return;
 
   const padX = 12;
@@ -550,7 +446,7 @@ function drawAutoCenteredText(ctx, text, box, fontFamily, colorHex) {
   ctx.fillText(text, cx, cy);
 }
 
-function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex) {
+function drawAutoWrappedLeftText(text, box, fontFamily, colorHex) {
   if (!text) return;
 
   const padX = 12;
@@ -558,21 +454,21 @@ function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex) {
   const maxW = box.w - padX * 2;
   const maxH = box.h - padY * 2;
 
-  let size = 36;
+  text = text.replace(/\r/g, "").trim();
+
+  let size = 32;
   ctx.textBaseline = "top";
   ctx.textAlign = "left";
 
-  text = text.replace(/\r/g, "").trim();
-
   while (size > 8) {
     ctx.font = size + "px " + fontFamily;
-    const lines = wrapText(ctx, text, maxW);
+    const lines = wrapText(text, maxW);
     if (lines.length * (size + 6) <= maxH) break;
     size--;
   }
 
   ctx.fillStyle = colorHex;
-  const lines = wrapText(ctx, text, maxW);
+  const lines = wrapText(text, maxW);
   let y = box.y + padY;
 
   for (const line of lines) {
@@ -581,36 +477,23 @@ function drawAutoWrappedLeftText(ctx, text, box, fontFamily, colorHex) {
   }
 }
 
-function wrapText(ctx, text, maxW) {
+function wrapText(text, maxW) {
   const words = text.split(/(\s+)/);
   const lines = [];
   let line = "";
 
   for (const w of words) {
-    const test = line + w;
-    if (ctx.measureText(test).width > maxW && line) {
+    const t = line + w;
+    if (ctx.measureText(t).width > maxW && line) {
       lines.push(line);
       line = w.trim();
     } else {
-      line = test;
+      line = t;
     }
   }
   if (line) lines.push(line);
   return lines;
 }
 
-// ===============================
-// PNG ダウンロード
-// ===============================
-async function downloadPNG() {
-  await drawPreview();
-  const link = document.createElement("a");
-  link.download = "STAR_RESONANCE_ID.png";
-  link.href = canvas.toDataURL("image/png");
-  link.click();
-}
-
-// ===============================
-// 初期描画
-// ===============================
+// 初期表示
 drawPreview();
