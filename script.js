@@ -346,13 +346,15 @@ async function drawSimple() {
 async function drawClassic() {
   const C = CONFIG_CLASSIC;
 
-  // 背景（横幅フィット／縦はアスペクト比維持）
-  const baseImg = await loadImage(C.basePath);
-  if (baseImg) {
-    const drawW = CANVAS_W;
-    const drawH = Math.round(1200 * (CANVAS_W / 1600)); // 1200 * scaleX
-    ctx.drawImage(baseImg, 0, 0, drawW, drawH);
-  }
+  // ★ classic 背景は 4:3（1600×1200）のまま縮小表示する
+const baseImg = await loadImage(C.basePath);
+if (baseImg) {
+    // 4:3 の比率に合わせて計算
+    const targetW = CANVAS_W;                  // 1244px に合わせて縮小
+    const targetH = Math.round(targetW * 0.75); // 4:3 の縦 = 横×0.75 → 933px
+
+    ctx.drawImage(baseImg, 0, 0, targetW, targetH);
+}
 
   // キャラアイコン
   if (userIconImg_classic) {
