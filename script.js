@@ -100,8 +100,9 @@ const CONFIG_BP = {
   basePath: "base_bp.png",
 
   // 背景 & アイコン（トリミング対象）
-  bgImgBox:   { x: 40,  y: 30,  w: 1820, h: 540 }, // BG IMG（青枠）
-  iconBox:    { x: 70,  y: 60,  w: 300,  h: 500 }, // ICON（緑枠）
+  // ★ここをユーザー指定どおりに修正★
+  bgImgBox:   { x: 0,  y: 0,   w: 1904, h: 534 }, // BG IMG（青枠）
+  iconBox:    { x: 47, y: 56,  w: 340,  h: 724 }, // ICON（緑枠）
 
   // テキスト＆その他
   name:       { x: 360, y:  70, w: 900, h: 120 }, // 左寄せ 白
