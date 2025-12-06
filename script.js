@@ -499,18 +499,27 @@ function wrapText(text, maxW) {
 // Discordバナー ランダム表示
 // ==============================
 
+// ▼ バナー画像のファイル名（GitHub Pages に置いたもの）
+const banners = [
+  "banner1.png",
+  "banner2.png"
+];
+
+// ▼ ランダム選択して表示
 function showRandomBanner() {
-  const banners = ["banner1.png", "banner2.png"];
+  const banner = banners[Math.floor(Math.random() * banners.length)];
+  const img = document.getElementById("randomBanner");
 
-  // ランダム選択
-  const choice = banners[Math.floor(Math.random() * banners.length)];
+  img.src = banner;
 
-  // 表示
-  const img = document.getElementById("discordBannerImg");
-  img.src = choice;
+  // 表示時に幅をプレビューと揃える（CSSで自動調整される）
+  img.style.maxWidth = "100%";
+  img.style.height = "auto";
 }
 
-showRandomBanner(); // 読み込み時に実行
+// ページ読み込み時
+window.addEventListener("load", showRandomBanner);
+
 
 // 初期表示
 drawPreview();
