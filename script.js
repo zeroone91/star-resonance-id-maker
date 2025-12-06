@@ -93,7 +93,6 @@ const CONFIG_CLASSIC = {
 
 // ----------------------------------------
 // ブルプロ風 CONFIG (base_bp 1904x1244)
-// sample_bp.png を元にした概ねの座標
 // ----------------------------------------
 const CONFIG_BP = {
   canvasW: BP_W,
@@ -229,6 +228,18 @@ const cropCancelBtn = document.getElementById("cropCancel");
 let currentCropTarget = null;
 let cropperInstance   = null;
 
+// モーダルを閉じる共通処理
+function closeCropModal() {
+  if (cropperInstance) {
+    cropperInstance.destroy();
+    cropperInstance = null;
+  }
+  currentCropTarget = null;
+  if (cropModal) {
+    cropModal.classList.remove("is-open");
+  }
+}
+
 // ----------------------------------------
 // 画像キャッシュ / ローダ
 // ----------------------------------------
@@ -289,6 +300,16 @@ fileIcon_c?.addEventListener("change", e => {
 // ----------------------------------------
 function openCropper(file, target) {
   if (!file) return;
+  if (typeof Cropper === "undefined") {
+    // Cropper.js が読み込めていない場合はそのまま読み込むだけ
+    readImageFile(file, img => {
+      if (target === "bp_icon") bpIconCroppedImg = img;
+      if (target === "bp_bg")   bpBgCroppedImg   = img;
+      drawPreview();
+    });
+    return;
+  }
+
   currentCropTarget = target;
 
   const reader = new FileReader();
@@ -316,7 +337,10 @@ function openCropper(file, target) {
         autoCropArea: 1
       });
 
-      cropModal.classList.remove("hide");
+      // モーダル表示
+      if (cropModal) {
+        cropModal.classList.add("is-open");
+      }
     };
   };
   reader.readAsDataURL(file);
@@ -340,22 +364,14 @@ cropOkBtn.addEventListener("click", () => {
   img.onload = () => {
     if (currentCropTarget === "bp_icon") bpIconCroppedImg = img;
     if (currentCropTarget === "bp_bg")   bpBgCroppedImg   = img;
-    cropModal.classList.add("hide");
-    cropperInstance.destroy();
-    cropperInstance = null;
-    currentCropTarget = null;
+    closeCropModal();
     drawPreview();
   };
   img.src = canvasCrop.toDataURL("image/png");
 });
 
 cropCancelBtn.addEventListener("click", () => {
-  if (cropperInstance) {
-    cropperInstance.destroy();
-    cropperInstance = null;
-  }
-  currentCropTarget = null;
-  cropModal.classList.add("hide");
+  closeCropModal();
 });
 
 // ブルプロ風 file change
@@ -380,6 +396,9 @@ filePhoto3_bp?.addEventListener("change", e => {
 // デザイン切替
 // ----------------------------------------
 designSelect.addEventListener("change", () => {
+  // デザイン変更時にモーダルは必ず閉じる
+  closeCropModal();
+
   const d = designSelect.value;
   formSimple.classList.add("hide");
   formClassic.classList.add("hide");
@@ -612,9 +631,9 @@ async function drawBlueprotocol() {
   const comment   = inpComment_bp.value.trim();
 
   // 白文字グループ
-  drawShrinkText(name,      C.name,   font, "#ffffff", "left");
+  drawShrinkText(name,      C.name,     font, "#ffffff", "left");
   drawShrinkText(id,        C.playerId, font, "#ffffff", "left");
-  drawShrinkText(like,      C.like,  font, "#ffffff", "left");
+  drawShrinkText(like,      C.like,     font, "#ffffff", "left");
   drawShrinkText(playTime,  C.playTime, font, "#ffffff", "left");
   drawShrinkText("Lv." + level, C.level, font, "#ffffff", "right");
 
@@ -834,6 +853,8 @@ function showRandomBanner() {
 }
 
 window.addEventListener("load", () => {
+  // 念のためモーダルは閉じた状態からスタート
+  closeCropModal();
   showRandomBanner();
   drawPreview();
 });
