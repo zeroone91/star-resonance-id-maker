@@ -730,14 +730,18 @@ function drawAutoCenteredText(text, box, fontFamily, colorHex) {
   const maxW = box.w - padX * 2;
   const maxH = box.h - padY * 2;
 
+  // 高さ（maxH）を基準に初期フォントサイズを決定
   let size = Math.min(64, maxH);
+  if (size < 8) size = 8;
 
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
 
+  // 幅オーバーの場合のみ縮小（高さは上で決め打ち）
   while (size > 8) {
     ctx.font = size + "px " + fontFamily;
-    if (ctx.measureText(text).width <= maxW && size <= maxH) break;
+    const w = ctx.measureText(text).width;
+    if (w <= maxW) break;
     size--;
   }
 
@@ -799,7 +803,8 @@ function drawShrinkText(text, box, fontFamily, colorHex, align = "left") {
 
   while (size > 8) {
     ctx.font = size + "px " + fontFamily;
-    if (ctx.measureText(text).width <= maxW && size <= maxH) break;
+    const w = ctx.measureText(text).width;
+    if (w <= maxW) break;
     size--;
   }
 
