@@ -8,6 +8,9 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Yusei+Magic&family=DotGothic16&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
 
+  <!-- Cropper.js（ブルプロ風用） -->
+  <link rel="stylesheet" href="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.css" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -36,6 +39,7 @@
         <select id="designSelect">
           <option value="simple">シンプル</option>
           <option value="classic">クラシック</option>
+          <option value="blueprotocol">ブルプロ風</option>
         </select>
       </label>
     </div>
@@ -225,6 +229,102 @@
 
     </div><!-- /formClassic -->
 
+    <!-- ブルプロ風 フォーム -->
+    <div id="formBP" class="form-block hide">
+
+      <label>🔴プレイヤー名
+        <input id="inpName_bp" type="text" placeholder="例：ロローラ" />
+      </label>
+
+      <label>🔴プレイヤーID
+        <input id="inpPlayerId_bp" type="text" placeholder="例：00001234" />
+      </label>
+
+      <label>🔴所属ギルド
+        <input id="inpGuild_bp" type="text" placeholder="例：カナミア族" />
+      </label>
+
+      <label>🔴冒険者ランク
+        <input id="inpRank_bp" type="text" placeholder="例：001（3桁までの数値）" />
+      </label>
+
+      <label>🔴バトルスコア
+        <input id="inpScore_bp" type="text" placeholder="例：123456（6桁までの数値）" />
+      </label>
+
+      <div class="group">
+        <div class="group-title">🔴クラス（1つのみ選択可）</div>
+        <div id="classList_bp" class="check-grid">
+          <label><input type="radio" name="class_bp" value="ストームブレイド"><span>ストームブレイド</span></label>
+          <label><input type="radio" name="class_bp" value="ヘヴィガーディアン"><span>ヘヴィガーディアン</span></label>
+
+          <label><input type="radio" name="class_bp" value="ディバインアーチャー"><span>ディバインアーチャー</span></label>
+          <label><input type="radio" name="class_bp" value="ゲイルランサー"><span>ゲイルランサー</span></label>
+
+          <label><input type="radio" name="class_bp" value="シールドファイター"><span>シールドファイター</span></label>
+          <label><input type="radio" name="class_bp" value="ヴァーダントオラクル"><span>ヴァーダントオラクル</span></label>
+
+          <label><input type="radio" name="class_bp" value="フロストメイジ"><span>フロストメイジ</span></label>
+          <label><input type="radio" name="class_bp" value="ビートパフォーマー"><span>ビートパフォーマー</span></label>
+        </div>
+      </div>
+
+      <label>🔴クラスレベル
+        <input id="inpLevel_bp" type="text" placeholder="例：001（3桁までの数値）" />
+      </label>
+
+      <label>🔴プレイスタイル
+        <input id="inpPlayStyle_bp" type="text" placeholder="例：エンジョイ / ガチ勢 / SS活動" />
+      </label>
+
+      <label>🔴主な活動時間
+        <input id="inpPlayTime_bp" type="text" placeholder="例：日中メイン / 夜間メイン / 深夜メイン" />
+      </label>
+
+      <label>🔴獲得ライク
+        <input id="inpLike_bp" type="text" placeholder="例：任意の数値を入力可能" />
+      </label>
+
+      <label>🔴フリーコメント
+        <textarea id="inpComment_bp" placeholder="例：VC可能！よろしくお願いします！"></textarea>
+      </label>
+
+      <label>🔴キャラクターアイコン
+        <input id="fileIcon_bp" type="file" accept="image/*" />
+      </label>
+
+      <label>🔴背景イメージ
+        <input id="fileBg_bp" type="file" accept="image/*" />
+      </label>
+
+      <div class="group">
+        <div class="group-title">🔴フリーフォト</div>
+        <div class="bp-photo-row">
+          <span>[1枚目]</span>
+          <input id="filePhoto1_bp" type="file" accept="image/*" />
+        </div>
+        <div class="bp-photo-row">
+          <span>[2枚目]</span>
+          <input id="filePhoto2_bp" type="file" accept="image/*" />
+        </div>
+        <div class="bp-photo-row">
+          <span>[3枚目]</span>
+          <input id="filePhoto3_bp" type="file" accept="image/*" />
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">🔴フォント</div>
+        <div class="font-grid">
+          <label><input type="radio" name="font_bp" value="A" checked><span class="font-sample font-a">かっこいい系</span></label>
+          <label><input type="radio" name="font_bp" value="B"><span class="font-sample font-b">かわいい系</span></label>
+          <label><input type="radio" name="font_bp" value="C"><span class="font-sample font-c">ゲーム系</span></label>
+          <label><input type="radio" name="font_bp" value="D"><span class="font-sample font-d">おしゃれ系</span></label>
+        </div>
+      </div>
+
+    </div><!-- /formBP -->
+
     <!-- 共通ボタン -->
     <div class="button-area">
       <button id="btnRender" class="btn-main">画像を作成</button>
@@ -242,16 +342,31 @@
     <p class="note">※本コンテンツに著作権侵害の意図はございません</p>
     <p class="note">製作者：<a href="https://x.com/ZEROONE_GAME" target="_blank" rel="noopener noreferrer">@ZEROONE_GAME</a></p>
 
+    <!-- Discord バナー（ランダム表示） -->
     <div id="discordBannerArea">
-  <a href="https://discord.gg/pKZUj5Pnde" target="_blank">
-    <img id="discordBannerImg" src="" alt="Discord Banner">
-  </a>
-</div>
-
+      <a href="https://discord.gg/pKZUj5Pnde" target="_blank" rel="noopener noreferrer">
+        <img id="randomBanner" src="" alt="Discord Banner" />
+      </a>
+    </div>
   </section>
 
 </main>
 
+<!-- Cropper.js モーダル（ブルプロ風専用） -->
+<div id="cropModal" class="crop-modal hide">
+  <div class="crop-modal-inner">
+    <p id="cropTitle" class="crop-title"></p>
+    <div class="crop-image-wrap">
+      <img id="cropImage" alt="">
+    </div>
+    <div class="crop-buttons">
+      <button type="button" id="cropOk" class="btn-main">この範囲で切り取る</button>
+      <button type="button" id="cropCancel" class="btn-sub">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/cropperjs@1.5.13/dist/cropper.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
