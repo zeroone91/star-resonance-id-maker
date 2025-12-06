@@ -639,7 +639,22 @@ async function drawBlueprotocol() {
   const level = (inpLevel_bp.value.trim() || "1");
   const playStyle = inpPlayStyle_bp.value.trim();
   const playTime  = inpPlayTime_bp.value.trim();
-  const comment   = inpComment_bp.value.trim();
+const comment   = inpComment_bp.value.trim();
+
+// ギルド / プレイスタイル入力があるときだけ背景を描画
+if (guild) {
+  const bpGuildBgImg = await loadImage("bp_guild.png");
+  if (bpGuildBgImg) {
+    ctx.drawImage(bpGuildBgImg, 475, 646, 684, 180);
+  }
+}
+if (playStyle) {
+  const bpPlayStyleBgImg = await loadImage("bp_playstyle.png");
+  if (bpPlayStyleBgImg) {
+    ctx.drawImage(bpPlayStyleBgImg, 1174, 646, 683, 180);
+  }
+}
+
 
   // 白文字グループ
   drawShrinkText(name,      C.name,     font, "#ffffff", "left");
@@ -653,7 +668,18 @@ async function drawBlueprotocol() {
   drawShrinkText(score,     C.score,      font, "#000000", "right");
   drawShrinkText(guild,     C.guild,      font, "#000000", "left");
   drawShrinkText(playStyle, C.playStyle,  font, "#000000", "left");
-  drawFreeComment(comment, C.freeComment, font, "#000000");
+drawFreeComment(
+  comment,
+  {
+    x: C.freeComment.x + 20,
+    y: C.freeComment.y,
+    w: C.freeComment.w - 40,
+    h: C.freeComment.h
+  },
+  font,
+  "#000000"
+);
+
 }
 
 // ブルプロ用フォント取得
@@ -835,45 +861,13 @@ function drawShrinkText(text, box, fontFamily, colorHex, align = "left") {
 function wrapLines(lines, maxW) {
   const result = [];
   for (const line of lines) {
-    const words = line.split(/(\s+)/);
     let current = "";
-    for (const w of words) {
-      const t = current + w;
+    for (const ch of line) {
+      const t = current + ch;
       if (ctx.measureText(t).width > maxW && current) {
         result.push(current);
-        current = w.trim();
-      }
-
-function drawFreeComment(text, box, fontFamily, colorHex) {
-  if (!text) return;
-  const padX = 12;
-  const padY = 8;
-  const maxW = box.w - padX * 2;
-  const maxH = box.h - padY * 2;
-  text = text.replace(/\r/g, "").trim();
-  const linesRaw = text.split(/\n/);
-  let size = Math.floor(box.h * 0.5);
-  if (size < 10) size = 10;
-  ctx.textBaseline = "top";
-  ctx.textAlign = "left";
-  while (size > 8) {
-    ctx.font = size + "px " + fontFamily;
-    const lines = wrapLines(linesRaw, maxW);
-    const totalH = lines.length * (size + 4);
-    if (totalH <= maxH) {
-      ctx.fillStyle = colorHex;
-      let y = box.y + padY;
-      for (const line of lines) {
-        ctx.fillText(line, box.x + padX, y);
-        y += size + 4;
-      }
-      return;
-    }
-    size--;
-  }
-}
-
- else {
+        current = ch;
+      } else {
         current = t;
       }
     }
