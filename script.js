@@ -458,8 +458,9 @@ async function drawPreview() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (design === "classic") {
-    await drawClassic();
-  } else if (design === "blueprotocol") {
+    canvas.width = 1600;
+    canvas.height = 1200;
+} else if (design === "blueprotocol") {
     await drawBlueprotocol();
   } else {
     await drawSimple();
