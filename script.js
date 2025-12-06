@@ -430,7 +430,7 @@ btnDownload.addEventListener("click", async () => {
   if (design === "classic") {
     canvas.width  = 1600;
     canvas.height = 1200;
-    await drawClassic(); // ← クラシックを1600×1200で再描画
+    await drawClassic(true);  // ★ DL用フルサイズ描画
   } else if (design === "blueprotocol") {
     canvas.width  = BP_W;
     canvas.height = BP_H;
@@ -447,9 +447,10 @@ btnDownload.addEventListener("click", async () => {
   a.href = canvas.toDataURL("image/png");
   a.click();
 
-  // 保存後はプレビュー用サイズへ戻す
+  // 保存後はプレビュー用に戻す
   drawPreview();
 });
+
 
 
 btnShareX.addEventListener("click", () => {
@@ -536,18 +537,37 @@ if (baseImg) {
 // ----------------------------------------
 // classic 描画
 // ----------------------------------------
-async function drawClassic() {
+async function drawClassic(isFull = false) {
   const C = CONFIG_CLASSIC;
+  const scale = scaleX;
+
+  // box を「そのまま使う」か「scale を解除して使う」か切り替えるヘルパー
+  const box = (b) => {
+    if (!isFull) return b; // プレビュー時：今まで通り縮小後座標をそのまま使う
+    return {
+      x: Math.round(b.x / scale),
+      y: Math.round(b.y / scale),
+      w: Math.round(b.w / scale),
+      h: Math.round(b.h / scale)
+    };
+  };
 
   const baseImg = await loadImage(C.basePath);
   if (baseImg) {
-    const drawW = CANVAS_W;
-    const drawH = Math.round(1200 * scaleX);
-    ctx.drawImage(baseImg, 0, 0, drawW, drawH);
+    if (isFull) {
+      // DL用：1600x1200 ぴったりで描画
+      ctx.drawImage(baseImg, 0, 0, 1600, 1200);
+    } else {
+      // プレビュー用：横1244 にフィットさせて縮小描画
+      const drawW = CANVAS_W;
+      const drawH = Math.round(1200 * scale);
+      ctx.drawImage(baseImg, 0, 0, drawW, drawH);
+    }
   }
 
+  // アイコン
   if (userIconImg_classic) {
-    drawImageCover(userIconImg_classic, C.userIcon);
+    drawImageCover(userIconImg_classic, box(C.userIcon));
   }
 
   // Class 最大3つ
@@ -556,7 +576,7 @@ async function drawClassic() {
     .map(cb => CLASS_ICON_MAP[cb.value])
     .filter(Boolean)
     .slice(0, 3);
-  await drawIconArray(classIcons, C.classFrame);
+  await drawIconArray(classIcons, box(C.classFrame));
 
   // VC 最大2つ
   const vcIcons = Array.from(document.querySelectorAll('#vcList_c input[type="checkbox"]'))
@@ -564,8 +584,9 @@ async function drawClassic() {
     .map(cb => VC_ICON_MAP[cb.value])
     .filter(Boolean)
     .slice(0, 2);
+  const vcFrames = C.vcFrames.map(box);
   for (let i = 0; i < vcIcons.length; i++) {
-    await drawIcon(vcIcons[i], C.vcFrames[i]);
+    await drawIcon(vcIcons[i], vcFrames[i]);
   }
 
   // PlayTime 最大3つ
@@ -574,8 +595,9 @@ async function drawClassic() {
     .map(cb => PT_ICON_MAP[cb.value])
     .filter(Boolean)
     .slice(0, 3);
+  const ptFrames = C.ptFrames.map(box);
   for (let i = 0; i < ptIcons.length; i++) {
-    await drawIcon(ptIcons[i], C.ptFrames[i]);
+    await drawIcon(ptIcons[i], ptFrames[i]);
   }
 
   // PlayStyle 5段階
@@ -583,7 +605,8 @@ async function drawClassic() {
   if (psChecked) {
     const idx = Number(psChecked.value) - 1;
     if (idx >= 0 && idx < C.psFrames.length) {
-      await drawIcon(PS_ICON_PATH, C.psFrames[idx]);
+      const psFrames = C.psFrames.map(box);
+      await drawIcon(PS_ICON_PATH, psFrames[idx]);
     }
   }
 
@@ -592,13 +615,15 @@ async function drawClassic() {
   const colorKey = document.querySelector('input[name="color_c"]:checked')?.value || "white";
   const color    = resolveColor(colorKey);
 
-  drawAutoCenteredText(inpName_c.value.trim(),     C.name,     font, color);
-  drawAutoCenteredText(inpPlayerId_c.value.trim(), C.playerId, font, color);
-  drawAutoCenteredText(inpGuild_c.value.trim(),    C.guild,    font, color);
+  // テキスト
+  drawAutoCenteredText(inpName_c.value.trim(),     box(C.name),     font, color);
+  drawAutoCenteredText(inpPlayerId_c.value.trim(), box(C.playerId), font, color);
+  drawAutoCenteredText(inpGuild_c.value.trim(),    box(C.guild),    font, color);
 
-  // フリーコメント：高さベースで自動縮小・左寄せ
-  drawFreeComment(inpComment_c.value.trim(), C.freeComment, font, color);
+  // フリーコメント
+  drawFreeComment(inpComment_c.value.trim(), box(C.freeComment), font, color);
 }
+
 
 // ----------------------------------------
 // ブルプロ風 描画
