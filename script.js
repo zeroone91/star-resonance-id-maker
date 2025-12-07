@@ -465,21 +465,30 @@ btnShareX.addEventListener("click", () => {
 });
 
 // ----------------------------------------
-// メイン描画
+// メイン描画（完全修正版）
 // ----------------------------------------
 async function drawPreview() {
   const design = designSelect.value;
 
+  // ★ ここで必ずキャンバスサイズをデザインごとに切り替える
   if (design === "classic") {
-    await drawClassic();
+    // クラシックはプレビュー用サイズ（縦長）
+    canvas.width  = CANVAS_W;
+    canvas.height = CANVAS_H;
   } else if (design === "blueprotocol") {
-    await drawBlueprotocol();
+    // ★ ブルプロは横長サイズ
+    canvas.width  = BP_W;
+    canvas.height = BP_H;
   } else {
-    canvas.width = CANVAS_W;
+    // simple
+    canvas.width  = CANVAS_W;
     canvas.height = CANVAS_H;
   }
+
+  // クリア
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // デザインごとに1回だけ描画
   if (design === "classic") {
     await drawClassic();
   } else if (design === "blueprotocol") {
@@ -488,6 +497,7 @@ async function drawPreview() {
     await drawSimple();
   }
 }
+
 
 // ----------------------------------------
 // simple 描画
