@@ -425,12 +425,13 @@ btnRender.addEventListener("click", () => {
 
 btnDownload.addEventListener("click", async () => {
   const design = designSelect.value;
+  const ios = isIOS();
 
-  // 保存用にキャンバスサイズ切替
+  // ---- 描画サイズ切替 ----
   if (design === "classic") {
     canvas.width  = 1600;
     canvas.height = 1200;
-    await drawClassic(true);  // ★ DL用フルサイズ描画
+    await drawClassic(true);
   } else if (design === "blueprotocol") {
     canvas.width  = BP_W;
     canvas.height = BP_H;
@@ -441,15 +442,29 @@ btnDownload.addEventListener("click", async () => {
     await drawSimple();
   }
 
-  // PNG 保存
-  const a = document.createElement("a");
-  a.download = "スタレゾ自己紹介カード.png";
-  a.href = canvas.toDataURL("image/png");
-  a.click();
+  // ---- iOSだけJPEGで軽量化 ----
+  const mimeType = ios ? "image/jpeg" : "image/png";
+  const quality  = ios ? 0.92 : 1.0;
+  const dataUrl  = canvas.toDataURL(mimeType, quality);
 
-  // 保存後はプレビュー用に戻す
+  if (ios) {
+    // ✅ iOS → 新タブで開いて長押し保存
+    const w = window.open();
+    w.document.write(
+      '<img src="' + dataUrl + '" style="width:100%; height:auto;">'
+    );
+  } else {
+    // ✅ PC / Android → 今まで通り自動DL
+    const a = document.createElement("a");
+    a.download = "スタレゾ自己紹介カード." + (ios ? "jpg" : "png");
+    a.href = dataUrl;
+    a.click();
+  }
+
+  // ---- プレビューを元に戻す ----
   drawPreview();
 });
+
 
 
 
@@ -941,8 +956,33 @@ function showRandomBanner() {
 }
 
 window.addEventListener("load", () => {
-  // 念のためモーダルは閉じた状態からスタート
   closeCropModal();
   showRandomBanner();
   drawPreview();
+});
+
+
+
+// ----------------------------------------
+// iOS 判定 ＆ 説明表示
+// ----------------------------------------
+
+// ---- iOS判定 ----
+function isIOS() {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+// ---- iOSだけ保存ガイドを表示 ----
+document.addEventListener("DOMContentLoaded", () => {
+  const noticeArea = document.getElementById("iosNotice");
+  if (!noticeArea) return;
+
+  if (isIOS()) {
+    noticeArea.innerHTML = `
+      <p>
+        📱 <b>iOSの方へ</b><br>
+        保存できない場合は、<b>表示された画像を長押しして「写真に追加」</b>を選んでください。
+      </p>
+    `;
+  }
 });
