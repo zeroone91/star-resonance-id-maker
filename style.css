@@ -362,3 +362,18 @@ textarea {
   gap: 8px;
   justify-content: flex-end;
 }
+
+#iosNotice {
+  margin-top: 10px;
+}
+
+#iosNotice p {
+  margin: 0;
+  padding: 10px;
+  font-size: 10px;
+  line-height: 1.6;
+  background: #fff3cd;
+  border: 1px solid #ffd966;
+  border-radius: 6px;
+  color: #7a5c00;
+}
