@@ -980,8 +980,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (isIOS()) {
     noticeArea.innerHTML = `
       <p>
-        📱 <b>iOSの方へ</b><br>
-        保存できない場合は、<b>表示された画像を長押しして「写真に追加」</b>を選んでください。
+        iOSで自動保存されない場合は、<b>別タブで表示された画像を長押しして「写真に追加」</b>を選んでください。
       </p>
     `;
   }
