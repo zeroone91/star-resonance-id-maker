@@ -942,7 +942,7 @@ function wrapLines(lines, maxW) {
 // Discord バナー ランダム表示
 // ----------------------------------------
 const banners = [
-  "banner1.png",
+  "fotocon.jpg",
   "banner2.png"
 ];
 
