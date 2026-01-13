@@ -472,9 +472,9 @@ btnShareX.addEventListener("click", () => {
   const tweet =
     "(下記ハッシュタグは消さずに保存した画像を添付して使用してね)\n" +
     "　\n" +
-    "#スタレゾ #スタレゾ自己紹介カード\n" +
+    "#スタレゾ自己紹介カード #スタレゾフレンド募集 #スタレゾ\n" +
     "作成はコチラから👇\n" +
-    "https://zeroone91.github.io/star-resonance-id-maker/";
+    "https://qr.paps.jp/WA7CL";
   const url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet);
   window.open(url, "_blank");
 });
