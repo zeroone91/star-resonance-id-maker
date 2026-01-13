@@ -472,7 +472,7 @@ btnShareX.addEventListener("click", () => {
   const tweet =
     "(下記ハッシュタグは消さずに保存した画像を添付して使用してね)\n" +
     "　\n" +
-    "#スタレゾ自己紹介カード #スタレゾフレンド募集 #スタレゾ\n" +
+    "#スタレゾ自己紹介カード #スタレゾフレンド募集\n" +
     "作成はコチラから👇\n" +
     "https://qr.paps.jp/WA7CL";
   const url = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(tweet);
